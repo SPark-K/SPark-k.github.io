@@ -20,7 +20,7 @@
     <button onclick="getValue()">새로고침</button> (현재블록: <span id="lastBlock"></span>)</li>
   <li><input id="newValue" type="text"><button onclick="setValue()">새 값으로 저장하기</button>
       <div id="result"></div></li>
-  <li><input id="newValue" type="text"><button onclick="doubleValue()">두 배로 늘리기</button>
+  <li><button onclick="doubleValue()">두 배로 늘리기</button>
       <div id="result"></div></li>
   <li>새 값을 저장한 후 팬딩 트랜잭션이 블록에 포함되면 자동으로 페이지가 업데이트될 것입니다.</li>
 </ul>
@@ -29,10 +29,6 @@
 <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
 <!-- script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script -->
 <script>
-//var contractAddress = '0xc5244053ecA508a11951400fc7Af28738Fd0ce77';
-//var abi = [{"constant":false,"inputs":[{"name":"x","type":"uint256"}],"name":"set","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"get","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"}];
-//var contractAddress = '0x06e13bd0bcc57e75a3e761cfc78748f84d25d35e';
-//var abi = [{"constant":false,"inputs":[{"name":"_a","type":"uint256"}],"name":"set","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"get","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}];
 var contractAddress = '0x0738ba8ac870a5842334399a2c73ee61a2f0c423';
 var abi = [{"constant":true,"inputs":[],"name":"getData","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_a","type":"uint256"}],"name":"setData","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"doubleData","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}];
   
