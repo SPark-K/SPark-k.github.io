@@ -40,8 +40,10 @@
 <script>
 //var contractAddress = '0xc5244053ecA508a11951400fc7Af28738Fd0ce77';
 //var abi = [{"constant":false,"inputs":[{"name":"x","type":"uint256"}],"name":"set","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"get","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"}];
-var contractAddress = '0x06e13bd0bcc57e75a3e761cfc78748f84d25d35e';
-var abi = [{"constant":false,"inputs":[{"name":"_a","type":"uint256"}],"name":"set","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"get","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}];
+//var contractAddress = '0x06e13bd0bcc57e75a3e761cfc78748f84d25d35e';
+//var abi = [{"constant":false,"inputs":[{"name":"_a","type":"uint256"}],"name":"set","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"get","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}];
+var contractAddress = '0x0738ba8ac870a5842334399a2c73ee61a2f0c423';
+var abi = [{"constant":true,"inputs":[],"name":"getData","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_a","type":"uint256"}],"name":"setData","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"doubleData","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}];
   
 var simpleStorageContract;
 var simpleStorage;
@@ -77,7 +79,7 @@ function getLink(addr) {
 }
 
 function getValue() {
-  simpleStorage.get(function(e,r){
+  simpleStorage.getData(function(e,r){
     document.getElementById('storedData').innerHTML=r.toNumber();
 
   });
@@ -90,7 +92,7 @@ function setValue() {
 
   var newValue = document.getElementById('newValue').value;
   var txid
-  simpleStorage.set(newValue, function(e,r){
+  simpleStorage.setData(newValue, function(e,r){
     document.getElementById('result').innerHTML = 'Transaction id: ' + r + '<span id="pending" style="color:red;">(Pending)</span>';
     txid = r;
   });
