@@ -28,6 +28,7 @@
 <!-- script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script -->
 <script>
 
+  /*
 var contractAddress = '0xecdd207882fd6352f20f218173048d6af7a76367';
 var abi = [{"constant":false,"inputs":[{"name":"x","type":"uint256"}],"name":"set","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"get","outputs":[{"name":"","type":"uint256"}],"payable":false,"type":"function"}];
 var simpleStorageContract;
@@ -41,9 +42,9 @@ window.addEventListener('load', function() {
     console.log('No web3? You should consider trying MetaMask!')
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
     window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-  }
+  }*/
 
-  /*
+  
 var contractAddress = '0xf6502f6d3213080f51f9ffff04ceb1895117dc49';
 var abi = [{"constant":true,"inputs":[],"name":"getData","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_a","type":"uint256"}],"name":"setData","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}];
 var simpleStorageContract;
@@ -58,7 +59,7 @@ window.addEventListener('load', function() {
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
     window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
   }
-  */
+  
 /*var simplestroageContract = web3.eth.contract([{"constant":true,"inputs":[],"name":"getData","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_a","type":"uint256"}],"name":"setData","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}]);
 var simplestroage = simplestroageContract.new(
    {
@@ -112,7 +113,7 @@ function getLink(addr) {
   return '<a target="_blank" href=https://testnet.etherscan.io/address/' + addr + '>' + addr +'</a>';
 }
 function getValue() {
-  simpleStorage.get(function(e,r){
+  simpleStorage.getData(function(e,r){
     document.getElementById('storedData').innerHTML=r.toNumber();
   });
   web3.eth.getBlockNumber(function(e,r){
@@ -122,7 +123,7 @@ function getValue() {
 function setValue() {
   var newValue = document.getElementById('newValue').value;
   var txid
-  simpleStorage.set(newValue, function(e,r){
+  simpleStorage.setData(newValue, function(e,r){
     document.getElementById('result').innerHTML = 'Transaction id: ' + r + '<span id="pending" style="color:red;">(Pending)</span>';
     txid = r;
   });
