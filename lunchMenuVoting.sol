@@ -2,22 +2,19 @@ pragma solidity ^0.4.0;
 
 contract lunchMenuVoting {
     address addr_owner;
-    address[] addr_Voters;
-    string[] str_Name;
-    uint[] votedMenu;
     uint N_voters;
     struct VoteItem {
         address addr_Voters;
         string str_Name;
         uint votedMenu;
     }
-    VoteItem[] voteList;
+    VoteItem[] private voteList;
     struct MenuItem {
         uint id;
         string menu;
         uint N_voted;
     }
-    MenuItem[] menuList;
+    MenuItem[] private menuList;
     
     function lunchMenuVoting() public {
         addr_owner = msg.sender;
@@ -75,4 +72,7 @@ contract lunchMenuVoting {
         }
     }
     
+    function getMenus() public constant returns (string, string, string) {
+        return (menuList[0].menu, menuList[1].menu, menuList[2].menu); 
+    }
 }
