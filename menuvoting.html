@@ -16,9 +16,9 @@
 <ul>
   <li>컨트랙트 주소: <span id="contractAddr"></span></li>
   <li>내 어카운트 주소: <span id="accountAddr"></span></li>
-  <li> 메뉴 1: <span id="candidateMenus[0]"></span></li>
-  <li> 메뉴 2: <span id="candidateMenus[1]"></span></li>
-  <li> 메뉴 3: <span id="candidateMenus[2]"></span></li>
+  <li> 메뉴 1: <span id="Menu0"></span></li>
+  <li> 메뉴 2: <span id="Menu1"></span></li>
+  <li> 메뉴 3: <span id="Menu2"></span></li>
   <li><button onclick="getMenus()">메뉴 보기</button> (현재블록: <span id="lastBlock"></span>)</li>
   <li>팬딩 트랜잭션이 블록에 포함되면 자동으로 페이지가 업데이트될 것입니다.</li>
 </ul>
@@ -68,7 +68,10 @@ function getMenus() {
   //for (var i = 0; i < 3; i++) {
   //  document.getElementById('candidateMenus[i]').innerHTML = menus[i];  
   //}
-  document.getElementById("candidateMenus").innerHTML = menus;  
+  //document.getElementById("candidateMenus").innerHTML = menus;  
+  document.getElementById('Menu0').innerHTML = menus[0]; 
+  document.getElementById('Menu1').innerHTML = menus[1]; 
+  document.getElementById('Menu2').innerHTML = menus[2]; 
   
   //for ( var i = 0; i < 3; i++ ) {
   //      document.write( '<p>' + menus[i] + '</p>' );
