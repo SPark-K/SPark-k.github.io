@@ -75,11 +75,11 @@ function getMenus() {
   //  document.getElementById('Menu2').innerHTML = r[2]; 
  // });
   
-  lunchmenuvoting.getMenus(function(e,r){
-    menus[0] = r[0]; 
-    menus[1] = r[1]; 
-    menus[2] = r[2]; 
-  });
+  //lunchmenuvoting.getMenus(function(e,r){
+  //  menus[0] = r[0]; 
+  //  menus[1] = r[1]; 
+  //  menus[2] = r[2]; 
+  //});
   //for (var i = 0; i < 3; i++) {
   //  document.getElementById('candidateMenus[i]').innerHTML = menus[i];  
   //}
@@ -92,7 +92,15 @@ function getMenus() {
   //  menus[i] = lunchmenuvoting.getMenus();  
   //}
   
-  let [menu[0], menu[1], menu[2]] = lunchmenuvoting.getMenus.call();
+  //let [menu[0], menu[1], menu[2]] = lunchmenuvoting.getMenus.call();
+  
+  lunchmenuvoting.getMenus(function(e,r) {
+
+     document.getElementById('Menu0').value = r[0];
+     document.getElementById('Menu1').value = r[1];
+     document.getElementById('Menu1').value = r[2];
+
+  });
   
   for ( var i = 0; i < 3; i++ ) {
         document.write( '<p>' + menus[i] + '</p>' );
