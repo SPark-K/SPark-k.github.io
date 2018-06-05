@@ -75,4 +75,8 @@ contract lunchMenuVoting {
     function getMenus() public constant returns (string, string, string) {
         return (menuList[0].menu, menuList[1].menu, menuList[2].menu); 
     }
+    
+    function getCounts() public constant returns (uint, uint, uint) {
+        return (menuList[0].N_voted, menuList[1].N_voted, menuList[2].N_voted); 
+    }
 }
