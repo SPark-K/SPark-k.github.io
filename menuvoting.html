@@ -74,13 +74,13 @@ function getMenus() {
   //  document.getElementById('candidateMenus[i]').innerHTML = menus[i];  
   //}
   //document.getElementById("candidateMenus").innerHTML = menus;  
-  document.getElementById('Menu0').innerHTML = menus[0]; 
-  document.getElementById('Menu1').innerHTML = menus[1]; 
-  document.getElementById('Menu2').innerHTML = menus[2]; 
+  //document.getElementById('Menu0').innerHTML = menus[0]; 
+  //document.getElementById('Menu1').innerHTML = menus[1]; 
+  //document.getElementById('Menu2').innerHTML = menus[2]; 
   
-  //for ( var i = 0; i < 3; i++ ) {
-  //      document.write( '<p>' + menus[i] + '</p>' );
-  //    }
+  for ( var i = 0; i < 3; i++ ) {
+        document.write( '<p>' + menus[i] + '</p>' );
+      }
   
   web3.eth.getBlockNumber(function(e,r){
     document.getElementById('lastBlock').innerHTML = r;
