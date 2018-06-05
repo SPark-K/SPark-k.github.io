@@ -20,6 +20,8 @@
   <li> 메뉴 2: <span id="Menu1"></span></li>
   <li> 메뉴 3: <span id="Menu2"></span></li>
   <li><button onclick="getMenus()">메뉴 보기</button> (현재블록: <span id="lastBlock"></span>)</li>
+  <li>이름:<input id="name" type="text"> 선호메뉴:<input id="voted" type="text"><button onclick="setVote()">투표하기</button>
+    <div id="result"></div></li>
   <li><button onclick="getResults()">투표 현황 보기</button></li>
   <li>팬딩 트랜잭션이 블록에 포함되면 자동으로 페이지가 업데이트될 것입니다.</li>
   <li> 최다 득표 메뉴: <span id="WonMenu"></span></li>
@@ -82,6 +84,28 @@ function getResults() {
      document.getElementById('WonMenu').innerHTML = r[0];
      document.getElementById('VotedCount').innerHTML = r[1];
   });
+}
+  
+function setVote(){
+  var name = document.getElementById('name').value;
+  var voted = document.getElementById('voted').value;
+  var txid
+  lunchmenuvoting.registerVoting(name, voted, function(e,r){
+    document.getElementById('result').innerHTML = 'Transaction id: ' + r + '<span id="pending" style="color:red;">(Pending)</span>';
+    txid = r;
+  });
+  var filter = web3.eth.filter('latest');
+  filter.watch(function(e, r) {
+    getResults();
+    web3.eth.getTransaction(txid, function(e,r){
+      if (r != null && r.blockNumber > 0) {
+        document.getElementById('pending').innerHTML = '(기록된 블록: ' + r.blockNumber + ')';
+        document.getElementById('pending').style.cssText ='color:green;';
+        //document.getElementById('storedData').style.cssText ='color:green; font-size:300%;';
+        filter.stopWatching();
+      }
+   });
+ });
 }
 
 </script>
