@@ -22,9 +22,14 @@
     <td size='5'>메뉴 2: <span id="Menu1"></span></td>
     <td size='5'>메뉴 3: <span id="Menu2"></span></td>
   </tr>  
+  <tr>
+    <td size='5'><span id="Menu0count"></span>표</td>
+    <td size='5'><span id="Menu1count"></span>표</td>
+    <td size='5'><span id="Menu2count"></span>표</td>
+  </tr> 
 </table>
   <li><button onclick="getMenus()">메뉴 보기</button> (현재블록: <span id="lastBlock"></span>)</li>
-  <li>이름:<input id="name" type="text" size="10"> 선호메뉴:<input id="voted" type="text" size="10"><button onclick="setVote()">투표하기</button>
+  <li>이름:<input id="name" type="text" size="10"> 선호메뉴(번호입력):<input id="voted" type="text" size="10"><button onclick="setVote()">투표하기</button>
     <div id="result"></div></li>
   <li><button onclick="getResults()">투표 현황 보기</button></li>
   <li>팬딩 트랜잭션이 블록에 포함되면 자동으로 페이지가 업데이트될 것입니다.</li>
@@ -77,6 +82,12 @@ function getMenus() {
      document.getElementById('Menu1').innerHTML = r[1];
      document.getElementById('Menu2').innerHTML = r[2];
   });
+  
+  lunchmenuvoting.getCounts(function(e,r) {
+     document.getElementById('Menu0count').innerHTML = r[0];
+     document.getElementById('Menu1count').innerHTML = r[1];
+     document.getElementById('Menu2count').innerHTML = r[2];
+  });
 
   web3.eth.getBlockNumber(function(e,r){
     document.getElementById('lastBlock').innerHTML = r;
@@ -110,7 +121,6 @@ function setVote(){
       if (r != null && r.blockNumber > 0) {
         document.getElementById('pending').innerHTML = '(기록된 블록: ' + r.blockNumber + ')';
         document.getElementById('pending').style.cssText ='color:green;';
-        //document.getElementById('storedData').style.cssText ='color:green; font-size:300%;';
         filter.stopWatching();
       }
    });
