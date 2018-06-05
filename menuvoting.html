@@ -16,9 +16,9 @@
 <ul>
   <li>컨트랙트 주소: <span id="contractAddr"></span></li>
   <li>내 어카운트 주소: <span id="accountAddr"></span></li>
-  <li> 메뉴 1: <span id="candidateMenus[0]"></span></li>
-  <li> 메뉴 2: <span id="candidateMenus[1]"></span></li>
-  <li> 메뉴 3: <span id="candidateMenus[2]"></span></li>
+  <li> 메뉴 1: <span id="menus[0]"></span></li>
+  <li> 메뉴 2: <span id="menus[1]"></span></li>
+  <li> 메뉴 3: <span id="menus[2]"></span></li>
   <li><button onclick="getMenus()">메뉴 보기</button> (현재블록: <span id="lastBlock"></span>)</li>
   <li>팬딩 트랜잭션이 블록에 포함되면 자동으로 페이지가 업데이트될 것입니다.</li>
 </ul>
@@ -61,7 +61,7 @@ function getLink(addr) {
   return '<a target="_blank" href=https://testnet.etherscan.io/address/' + addr + '>' + addr +'</a>';
 }
 function getMenus() {
-  menus = lunchmenuvoting.getMenus.call(3);
+  //menus = lunchmenuvoting.getMenus.call(3);
   //lunchmenuvoting.getMenus(function(e,r){
   //  document.getElementById('candidateMenus').innerHTML=r.toNumber();
   //});
