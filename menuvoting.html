@@ -32,7 +32,7 @@ var abi = [{"constant":true,"inputs":[],"name":"getOwnder","outputs":[{"name":""
   
 var lunchmenuvotingContract;
 var lunchmenuvoting;
-var menus;
+var menus = [ 'a', 'b', 'c' ];
 window.addEventListener('load', function() {
   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
   if (typeof web3 !== 'undefined') {
@@ -61,13 +61,13 @@ function getLink(addr) {
   return '<a target="_blank" href=https://testnet.etherscan.io/address/' + addr + '>' + addr +'</a>';
 }
 function getMenus() {
-  menus = lunchmenuvoting.getMenus.call(2);
+  menus = lunchmenuvoting.getMenus.call(3);
   //lunchmenuvoting.getMenus(function(e,r){
   //  document.getElementById('candidateMenus').innerHTML=r.toNumber();
   //});
-  for (var i = 0; i < 3; i++) {
-    document.getElementById(candidateMenus[i]).innerHTML = menus[i];  
-  }
+  //for (var i = 0; i < 3; i++) {
+  //  document.getElementById(candidateMenus[i]).innerHTML = menus[i];  
+  //}
   
   web3.eth.getBlockNumber(function(e,r){
     document.getElementById('lastBlock').innerHTML = r;
