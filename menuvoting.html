@@ -19,12 +19,11 @@
   <li> 메뉴 1: <span id="Menu0"></span></li>
   <li> 메뉴 2: <span id="Menu1"></span></li>
   <li> 메뉴 3: <span id="Menu2"></span></li>
-  <br></br>
-  <li> 메뉴 1: <span id="menu[0]"></span></li>
-  <li> 메뉴 2: <span id="menu[1]"></span></li>
-  <li> 메뉴 3: <span id="menu[2]"></span></li>
   <li><button onclick="getMenus()">메뉴 보기</button> (현재블록: <span id="lastBlock"></span>)</li>
+  <li><button onclick="getResults()">투표 현황 보기</button></li>
   <li>팬딩 트랜잭션이 블록에 포함되면 자동으로 페이지가 업데이트될 것입니다.</li>
+  <li> 최다 득표 메뉴: <span id="WonMenu"></span></li>
+  <li> 득표수: <span id="VotedCount"></span></li>  
 </ul>
 
 </body>
@@ -65,57 +64,23 @@ function getLink(addr) {
   return '<a target="_blank" href=https://testnet.etherscan.io/address/' + addr + '>' + addr +'</a>';
 }
 function getMenus() {
-  //menus = lunchmenuvoting.getMenus.call();
-  //lunchmenuvoting.getMenus(function(e,r){
-  //  document.getElementById('candidateMenus').innerHTML=r.toNumber();
-  //});
-  //lunchmenuvoting.getMenus(function(e,r){
-  //  document.getElementById('Menu0').innerHTML = r[0]; 
-  //  document.getElementById('Menu1').innerHTML = r[1]; 
-  //  document.getElementById('Menu2').innerHTML = r[2]; 
- // });
-  
-  //lunchmenuvoting.getMenus(function(e,r){
-  //  menus[0] = r[0]; 
-  //  menus[1] = r[1]; 
-  //  menus[2] = r[2]; 
-  //});
-  //for (var i = 0; i < 3; i++) {
-  //  document.getElementById('candidateMenus[i]').innerHTML = menus[i];  
-  //}
-  //document.getElementById("candidateMenus").innerHTML = menus;  
-  //document.getElementById('Menu0').innerHTML = menus[0]; 
-  //document.getElementById('Menu1').innerHTML = menus[1]; 
-  //document.getElementById('Menu2').innerHTML = menus[2]; 
-  
-  //for (var i = 0; i < 3; i++) {
-  //  menus[i] = lunchmenuvoting.getMenus();  
-  //}
-  
-  let [menu[0], menu[1], menu[2]] = lunchmenuvoting.getMenus.call();
-  
-  lunchmenuvoting.getMenus(function(e,r) {
 
+  lunchmenuvoting.getMenus(function(e,r) {
      document.getElementById('Menu0').innerHTML = r[0];
      document.getElementById('Menu1').innerHTML = r[1];
      document.getElementById('Menu2').innerHTML = r[2];
-    
-    //menus[0] = r[0];
-     //menus[1]  = r[1];
-     //menus[2]  = r[2];
-    
-    //document.getElementById('accountAddr').innerHTML = getLink(r[0]);
-    
-    //console.log(r);
-
   });
-  
-  //for ( var i = 0; i < 3; i++ ) {
-  //      document.write( '<p>' + menus[i] + '</p>' );
-  //    }
-  
+
   web3.eth.getBlockNumber(function(e,r){
     document.getElementById('lastBlock').innerHTML = r;
+  });
+}
+  
+function getResults() {
+
+  lunchmenuvoting.getResults(function(e,r) {
+     document.getElementById('WonMenu').innerHTML = r[0];
+     document.getElementById('VotedCount').innerHTML = r[1];
   });
 }
 
