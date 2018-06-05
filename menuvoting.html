@@ -36,6 +36,8 @@
   <li> 최다 득표 메뉴: <span id="WonMenu"></span></li>
   <li> 득표수: <span id="WonVotedCount"></span></li>  
   <li> 전체 투표수: <span id="TotalVotedCount"></span></li> 
+  <li>신규메뉴(순서대로 3종류)<input id="newmenu0" type="text" size="10"> <input id="newmenu1" type="text" size="10"><input id="newmenu2" type="text" size="10"><button onclick="setNewMenu()">새 메뉴 입력</button>
+  
 </ul>
 
 </body>
@@ -116,6 +118,30 @@ function setVote(){
   });
   var filter = web3.eth.filter('latest');
   filter.watch(function(e, r) {
+    getMenus();
+    getResults();
+    web3.eth.getTransaction(txid, function(e,r){
+      if (r != null && r.blockNumber > 0) {
+        document.getElementById('pending').innerHTML = '(기록된 블록: ' + r.blockNumber + ')';
+        document.getElementById('pending').style.cssText ='color:green;';
+        filter.stopWatching();
+      }
+   });
+ });
+}
+  
+function setNewMenu(){
+  var newmenu0 = document.getElementById('newmenu0').value;
+  var newmenu1 = document.getElementById('newmenu1').value;
+  var newmenu2 = document.getElementById('newmenu2').value;
+  var txid
+  lunchmenuvoting.resetVoting(newmenu0, newmenu1, newmenu2, function(e,r){
+    document.getElementById('result').innerHTML = 'Transaction id: ' + r + '<span id="pending" style="color:red;">(Pending)</span>';
+    txid = r;
+  });
+  var filter = web3.eth.filter('latest');
+  filter.watch(function(e, r) {
+    getMenus();
     getResults();
     web3.eth.getTransaction(txid, function(e,r){
       if (r != null && r.blockNumber > 0) {
