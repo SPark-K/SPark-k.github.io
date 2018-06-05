@@ -25,12 +25,13 @@
 </table>
   <li> 메뉴 1: <span id="Menu0"></span> 메뉴 2: <span id="Menu1"></span> 메뉴 3: <span id="Menu2"></span></li>
   <li><button onclick="getMenus()">메뉴 보기</button> (현재블록: <span id="lastBlock"></span>)</li>
-  <li>이름:<input id="name" type="text" size="50"> 선호메뉴:<input id="voted" type="text" size="50"><button onclick="setVote()">투표하기</button>
+  <li>이름:<input id="name" type="text" size="10"> 선호메뉴:<input id="voted" type="text" size="10"><button onclick="setVote()">투표하기</button>
     <div id="result"></div></li>
   <li><button onclick="getResults()">투표 현황 보기</button></li>
   <li>팬딩 트랜잭션이 블록에 포함되면 자동으로 페이지가 업데이트될 것입니다.</li>
   <li> 최다 득표 메뉴: <span id="WonMenu"></span></li>
-  <li> 득표수: <span id="VotedCount"></span></li>  
+  <li> 득표수: <span id="WonVotedCount"></span></li>  
+  <li> 전체 투표수: <span id="TotalVotedCount"></span></li> 
 </ul>
 
 </body>
@@ -87,7 +88,8 @@ function getResults() {
 
   lunchmenuvoting.getResults(function(e,r) {
      document.getElementById('WonMenu').innerHTML = r[0];
-     document.getElementById('VotedCount').innerHTML = r[1];
+     document.getElementById('WonVotedCount').innerHTML = r[1];
+    document.getElementById('TotalVotedCount').innerHTML = r[2];
   });
 }
   
