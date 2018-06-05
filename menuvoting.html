@@ -65,7 +65,7 @@ function getLink(addr) {
   return '<a target="_blank" href=https://testnet.etherscan.io/address/' + addr + '>' + addr +'</a>';
 }
 function getMenus() {
-  menus = lunchmenuvoting.getMenus.call();
+  //menus = lunchmenuvoting.getMenus.call();
   //lunchmenuvoting.getMenus(function(e,r){
   //  document.getElementById('candidateMenus').innerHTML=r.toNumber();
   //});
@@ -98,7 +98,7 @@ function getMenus() {
 
      document.getElementById('Menu0').innerHTML = r[0];
      document.getElementById('Menu1').innerHTML = r[1];
-     document.getElementById('Menu1').innerHTML = r[2];
+     document.getElementById('Menu2').innerHTML = r[2];
     
     //menus[0] = r[0];
      //menus[1]  = r[1];
