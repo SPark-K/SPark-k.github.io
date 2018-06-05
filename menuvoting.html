@@ -17,12 +17,12 @@
   <li>컨트랙트 주소: <span id="contractAddr"></span></li>
   <li>내 어카운트 주소: <span id="accountAddr"></span></li>
   <li> 메뉴 1: <span id="Menu0"></span></li>
-  <!--<li> 메뉴 2: <span id="Menu1"></span></li>
+  <li> 메뉴 2: <span id="Menu1"></span></li>
   <li> 메뉴 3: <span id="Menu2"></span></li>
   <br></br>
   <li> 메뉴 1: <span id="menu[0]"></span></li>
   <li> 메뉴 2: <span id="menu[1]"></span></li>
-  <li> 메뉴 3: <span id="menu[2]"></span></li>-->
+  <li> 메뉴 3: <span id="menu[2]"></span></li>
   <li><button onclick="getMenus()">메뉴 보기</button> (현재블록: <span id="lastBlock"></span>)</li>
   <li>팬딩 트랜잭션이 블록에 포함되면 자동으로 페이지가 업데이트될 것입니다.</li>
 </ul>
@@ -65,7 +65,7 @@ function getLink(addr) {
   return '<a target="_blank" href=https://testnet.etherscan.io/address/' + addr + '>' + addr +'</a>';
 }
 function getMenus() {
-  //menus = lunchmenuvoting.getMenus.call();
+  menus = lunchmenuvoting.getMenus.call();
   //lunchmenuvoting.getMenus(function(e,r){
   //  document.getElementById('candidateMenus').innerHTML=r.toNumber();
   //});
@@ -97,8 +97,8 @@ function getMenus() {
   lunchmenuvoting.getMenus(function(e,r) {
 
      document.getElementById('Menu0').innerHTML = r[0];
-     //document.getElementById('Menu1').innerHTML = r[1];
-     //document.getElementById('Menu1').innerHTML = r[2];
+     document.getElementById('Menu1').innerHTML = r[1];
+     document.getElementById('Menu1').innerHTML = r[2];
     
     //menus[0] = r[0];
      //menus[1]  = r[1];
