@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.2.3/milligram.min.css">
+  <title> 점심 메뉴 투표 dApp (beta) </title>
+  <style>
+    body {margin-left:50px;}
+    #storedData {font-size:300%; margin-right:10px;}
+    #newValue {width: 200px; margin-right:10px; text-align:right;}
+  </style>
+</head>
+<body>
+<h3>점심 메뉴 투표 dApp (beta)</h3>
+<ul>
+  <li>컨트랙트 주소: <span id="contractAddr"></span></li>
+  <li>내 어카운트 주소: <span id="accountAddr"></span></li>
+//  <li>컨트랙트에 저장된 값: <span id="storedData"></span>
+  <li> 메뉴 1: <span id="candidateMenus[0]"></span>
+  <li> 메뉴 2: <span id="candidateMenus[1]"></span>
+  <li> 메뉴 3: <span id="candidateMenus[2]"></span>
+    <button onclick="getValue()">새로고침</button> (현재블록: <span id="lastBlock"></span>)</li>
+  <li><input id="newValue" type="text"><button onclick="setValue()">새 값으로 저장하기</button>
+      <div id="result"></div></li>
+  <li>팬딩 트랜잭션이 블록에 포함되면 자동으로 페이지가 업데이트될 것입니다.</li>
+</ul>
+
+</body>
+<script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
+<!-- script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script -->
+<script>
+var contractAddress = '0x0738ba8ac870a5842334399a2c73ee61a2f0c423';
+var abi = [{"constant":true,"inputs":[],"name":"getOwnder","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getMenus","outputs":[{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getResults","outputs":[{"name":"","type":"string"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_str1","type":"string"},{"name":"_str2","type":"string"},{"name":"_str3","type":"string"}],"name":"resetVoting","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_menu_id","type":"uint256"}],"name":"registerVoting","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getNVoters","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}];
+  
+var lunchmenuvotingContract
+var lunchmenuvoting
+window.addEventListener('load', function() {
+  // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+  if (typeof web3 !== 'undefined') {
+    // Use Mist/MetaMask's provider
+    window.web3 = new Web3(web3.currentProvider);
+  } else {
+    console.log('No web3? You should consider trying MetaMask!')
+    // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+    window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+  }
+  // Now you can start your app & access web3 freely:
+  startApp();
+});
+function startApp() {
+
+  lunchmenuvotingContract = web3.eth.contract(abi);
+  lunchmenuvoting = lunchmenuvotingContract.at(contractAddress);
+  document.getElementById('contractAddr').innerHTML = getLink(contractAddress);
+  web3.eth.getAccounts(function(e,r){
+    document.getElementById('accountAddr').innerHTML = getLink(r[0]);
+  });
+
+  getMenus();
+}
+function getLink(addr) {
+  return '<a target="_blank" href=https://testnet.etherscan.io/address/' + addr + '>' + addr +'</a>';
+}
+function getMenus() {
+  menuVoting.getMenus(function(e,r){
+    document.getElementById('candidateMenus').innerHTML=r.toNumber();
+  });
+  web3.eth.getBlockNumber(function(e,r){
+    document.getElementById('lastBlock').innerHTML = r;
+  });
+}
+
+</script>
+</html>
