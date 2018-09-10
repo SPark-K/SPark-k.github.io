@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+ 
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <script type="text/javascript" src="../dist/web3.min.js"></script>
+  <script type="text/javascript" src="../dist/utf8.js"></script>
+  <script type="text/javascript" src="../dist/bignumber.min.js"></script>
+  <script type="text/javascript">
+    var web3 = new Web3();
+    var provider = new web3.providers.HttpProvider('https://ropsten.infura.io/v3/207f7e69ea9c48be88d2c17a90c51a07');
+    web3.setProvider(provider);
+ 
+ 
+    function startMonitor() {
+      stop = false;
+      var startBlockNo = web3.eth.blockNumber - 20;
+      var table = document.getElementById('list');
+      var i = startBlockNo;
+      for (; i < web3.eth.blockNumber; i++) {
+          var result = web3.eth.getBlock(i);
+      }
+      setTimeout(function() {
+        watchBlock(table, i);
+      }, 3000);
+    }
+ 
+    function watchBlock(table, blockNumber) {
+      if (stop) {
+        return;
+      }
+      if (blockNumber == web3.eth.blockNumber) {
+        setTimeout(function() {
+          watchBlock(table, blockNumber);
+        }, 3000);
+        return;
+      }
+      var result = web3.eth.getBlock(blockNumber);
+      insertBlockRow(result, table, blockNumber);
+      setTimeout(function() {
+        watchBlock(table, ++blockNumber);
+      }, 3000);
+    }
+ 
+    function insertBlockRow(result, table) {
+      var row = table.insertRow();
+      var td = row.insertCell(0);
+      td.innerHTML = result.number;
+      var td = row.insertCell(1);
+      td.innerHTML = new Date(parseInt(result.timestamp, 16) * 1000).toString();
+      var td = row.insertCell(2);
+      td.innerHTML = result.hash;
+      var td = row.insertCell(3);
+      td.innerHTML = result.nonce;
+      var td = row.insertCell(4);
+      if (result.transactions.length > 0) {
+        insertTranRow(result.transactions, td);
+      }
+    }
+ 
+    function insertTranRow(transactions, td) {
+      var allDate = "";
+      for (var i = 0; i < transactions.length; i++) {
+        var data = web3.eth.getTransaction(transactions[i]);
+        allDate += JSON.stringify(data);
+      }
+      td.innerHTML = "<input type='text' value='" + allDate + "' /></td>";
+    }
+ 
+    function stopWatch() {
+      stop = true;
+    }
+  </script>
+ 
+</head>
+ 
+<body>
+  <br />
+  <input type="button" name="" value="start" onclick="startMonitor();" />
+  <input type="button" name="" value="stop" onclick="stopWatch();" />
+ 
+  <table id="list" border = "1">
+    <tr>
+      <th>block<br/>Number</th>
+      <th>TimeStamp</th>
+      <th>BlockHsh</th>
+      <th>nonce</th>
+      <th>Transaction</th>
+    </tr>
+  </table>
+ 
+</body>
+ 
+</html>
