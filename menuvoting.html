@@ -60,7 +60,7 @@ window.addEventListener('load', function() {
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
     //window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
     //window.web3 = new Web3(new Web3.providers.WebsocketProvider("wss://mainnet.infura.io/ws"));
-    window.web3 = new Web3(new Web3.providers.WebsocketProvider("https://ropsten.infura.io/v3/207f7e69ea9c48be88d2c17a90c51a07"));
+    window.web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/207f7e69ea9c48be88d2c17a90c51a07"));
   }
   // Now you can start your app & access web3 freely:
   startApp();
