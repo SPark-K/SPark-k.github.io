@@ -36,8 +36,8 @@
       <fieldset>
         <legend>Upload new photo</legend>
         <input type="file" name="photo" id="photo">
-        <!--<button type="button" onclick="upload()">Upload</button>-->
-        <button type="button" onclick="setItem()">Upload</button>
+        <button type="button" onclick="upload()">Upload</button>
+        <!--<button type="button" onclick="setItem()">Upload</button>-->
       </fieldset>
     </form>
     <div id="uploadresult"></div></li>
@@ -118,6 +118,7 @@ function getLink(addr) {
         //let url = `http://localhost:8080/ipfs/${result[0].hash}`	//for test at local
         //let hash_img = `${result[0].hash}`;
         //setItem('${result[0].hash}');
+	 setItem("dfsdfdsfs");
         
         /*console.log(`Url --> ${url}`)
         document.getElementById("url").innerHTML= url
@@ -127,13 +128,13 @@ function getLink(addr) {
     //  })
     //}
   }
-	function setItem() {
+	function setItem(hash_image) {
 		//var username = document.getElementById('name').value;
 	  //var voted = document.getElementById('voted').value;
 	  var txid;
 	  var teststr = "abc";
 	  	  
-	  decentar.registerItem(0, "name_spark", "time100", "loc159", "hash2nlflasjdfl", function(e,r){
+	  decentar.registerItem(0, "name_spark", "time100", "loc159", hash_image, function(e,r){
 	  	document.getElementById('uploadresult').innerHTML = "업로드 완료";
 	  });
 	  	
