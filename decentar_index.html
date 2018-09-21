@@ -104,16 +104,18 @@ function getLink(addr) {
 }
  function upload() {
     
-    /*const reader = new FileReader();
+    const reader = new FileReader();
     reader.onloadend = function() {
-      const ipfs = window.IpfsApi('localhost', 5001); // Connect to IPFS
+      //const ipfs = window.IpfsApi('localhost', 5001); // Connect to IPFS
+      //const ipfs = window.IpfsApi('https://ipfs.infura.io', 5001); // Connect to IPFS
+      const ipfs = window.IpfsApi('ipfs.infura.io', '5001', {protocol: 'https'});
       const buf = buffer.Buffer(reader.result); // Convert data into buffer
       ipfs.files.add(buf, (err, result) => { // Upload buffer to IPFS
         if(err) {
           console.error(err)
           return
         }
-        */
+        
         //let url = `https://ipfs.io/ipfs/${result[0].hash}`
         //let url = `http://localhost:8080/ipfs/${result[0].hash}`	//for test at local
         //let hash_img = `${result[0].hash}`;
