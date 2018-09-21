@@ -135,7 +135,7 @@ function getLink(addr) {
 
 	function setItem(hash_image) {
 		
-		document.getElementById('hash_value').innerHTML = hash_image;
+		
 		
 		//var username = document.getElementById('name').value;
 	  //var voted = document.getElementById('voted').value;
@@ -144,6 +144,7 @@ function getLink(addr) {
 	  	  
 	  decentar.registerItem(0, "name_spark", "time100", "loc159", hash_image, function(e,r){
 	  	document.getElementById('uploadresult').innerHTML = "업로드 완료";
+	  	document.getElementById('hash_value').innerHTML = hash_image;
 	  });
 	  	
 	  	
