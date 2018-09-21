@@ -40,7 +40,7 @@
         <button type="button" onclick="setItem()">Upload</button>
       </fieldset>
     </form>
-    
+    <div id="uploadresult"></div></li>
     <li><button onclick="getPhotos()">사진 보기</button> (현재블록: <span id="lastBlock"></span>)</li>
     <li><button onclick="setItem()">사진 수 보기</button></li>
     <li>아이템 수: <span id="Nitems"></span></li>
@@ -138,6 +138,13 @@ function getLink(addr) {
 	  var teststr = "abc";
 	  	  
 	  decentar.regiserItem(0, "spark'", "10", "SDFD100", "sfdf", function(e,r){
+	  	document.getElementById('uploadresult').innerHTML = "업로드 완료";
+	  });
+	  	
+	  	
+	  	
+	  	
+	  	
 	  decentar.getTotalListLength(function(e,r){
 	 	    document.getElementById('Nitems').innerHTML = r;
 	  });	 
