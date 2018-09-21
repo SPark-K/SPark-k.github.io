@@ -40,8 +40,7 @@
         <button type="button" onclick="setItem()">Upload</button>
       </fieldset>
     </form>
-    <li><div id="uploadresult"></div></li>
-    <li>image hash 값: <span id="hash_value"></span></li>
+    <div id="uploadresult"></div></li>
     <li><button onclick="getPhotos()">사진 보기</button> (현재블록: <span id="lastBlock"></span>)</li>
     <li><button onclick="setItem()">사진 수 보기</button></li>
     <li>아이템 수: <span id="Nitems"></span></li>
@@ -68,14 +67,12 @@
 <script>
 var contractAddress = '0x41aff8a5d06785eeb30a07086c0094118957ece9';
 var abi = [{"constant":true,"inputs":[],"name":"getOwnder","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getItem","outputs":[{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getTotalListLength","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getN_items_ofMine","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getItem_ofMine","outputs":[{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_id_tab","type":"uint256"},{"name":"_name","type":"string"},{"name":"_time","type":"string"},{"name":"_location","type":"string"},{"name":"_hash_image","type":"string"}],"name":"registerItem","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}];
-
 	//var contractAddress = '0xb72da27cfa7f28f3db6a88225ceb357efccd1ded';
 	//var abi = [{"constant":true,"inputs":[],"name":"getOwnder","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getMenus","outputs":[{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getResults","outputs":[{"name":"","type":"string"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_str1","type":"string"},{"name":"_str2","type":"string"},{"name":"_str3","type":"string"}],"name":"resetVoting","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_menu_id","type":"uint256"}],"name":"registerVoting","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getCounts","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getNVoters","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}];
  
   
 var decentarContract;
 var decentar;
-
 var menus = [ 'a', 'b', 'c' ];
 window.addEventListener('load', function() {
   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
@@ -105,27 +102,22 @@ function startApp() {
 function getLink(addr) {
   return '<a target="_blank" href=https://testnet.etherscan.io/address/' + addr + '>' + addr +'</a>';
 }
-
  function upload() {
-    /*
-    const reader = new FileReader();
+    
+    /*const reader = new FileReader();
     reader.onloadend = function() {
-      //const ipfs = window.IpfsApi('localhost', 5001); // Connect to IPFS
-      const ipfs = window.IpfsApi('https://ipfs.infura.io', 5001); // Connect to IPFS
+      const ipfs = window.IpfsApi('localhost', 5001); // Connect to IPFS
       const buf = buffer.Buffer(reader.result); // Convert data into buffer
       ipfs.files.add(buf, (err, result) => { // Upload buffer to IPFS
         if(err) {
           console.error(err)
           return
         }
-        
-        let url = `https://ipfs.io/ipfs/${result[0].hash}`
+        */
+        //let url = `https://ipfs.io/ipfs/${result[0].hash}`
         //let url = `http://localhost:8080/ipfs/${result[0].hash}`	//for test at local
-        let hash_img = `${result[0].hash}`;
-        document.getElementById('hash_value').innerHTML = hash_image;
-       */
-       setItem("sdfdf");
-        //setItem(hash_img);
+        //let hash_img = `${result[0].hash}`;
+        //setItem('${result[0].hash}');
         
         /*console.log(`Url --> ${url}`)
         document.getElementById("url").innerHTML= url
@@ -135,31 +127,23 @@ function getLink(addr) {
     //  })
     //}
   }
-
-	function setItem(hash_image) {
-		
-		
-		
+	function setItem() {
 		//var username = document.getElementById('name').value;
 	  //var voted = document.getElementById('voted').value;
 	  var txid;
 	  var teststr = "abc";
 	  	  
-	  decentar.registerItem(0, "name_spark", "time100", "loc159", hash_image, function(e,r){
+	  decentar.registerItem(0, "name_spark", "time100", "loc159", "hash2nlflasjdfl", function(e,r){
 	  	document.getElementById('uploadresult').innerHTML = "업로드 완료";
-	  	document.getElementById('hash_value').innerHTML = hash_image;
 	  });
 	  	
-	  	
-	  	
-	  	
+	    	
 	  	
 	  decentar.getTotalListLength(function(e,r){
 	 	    document.getElementById('Nitems').innerHTML = r;
 	  });	 
 	 
 	}
-
 function getPhotos() {
 	/*int n;
 	var url;
@@ -189,7 +173,5 @@ function getPhotos() {
           document.getElementById(output).src = url
   }*/
   
-
-
 </script>
 </html>
