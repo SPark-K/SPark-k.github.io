@@ -122,7 +122,8 @@ function getLink(addr) {
         let url = `https://ipfs.io/ipfs/${result[0].hash}`
         //let url = `http://localhost:8080/ipfs/${result[0].hash}`	//for test at local
         let hash_img = `${result[0].hash}`;
-        setItem(hash_img);
+        document.getElementById('hash_value').innerHTML = hash_image;
+       // setItem(hash_img);
         
         /*console.log(`Url --> ${url}`)
         document.getElementById("url").innerHTML= url
