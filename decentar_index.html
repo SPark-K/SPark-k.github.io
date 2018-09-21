@@ -107,20 +107,21 @@ function getLink(addr) {
 
  function upload() {
     
-    /*const reader = new FileReader();
+    const reader = new FileReader();
     reader.onloadend = function() {
-      const ipfs = window.IpfsApi('localhost', 5001); // Connect to IPFS
+      //const ipfs = window.IpfsApi('localhost', 5001); // Connect to IPFS
+      const ipfs = window.IpfsApi('ipfs.infura.io', 5001); // Connect to IPFS
       const buf = buffer.Buffer(reader.result); // Convert data into buffer
       ipfs.files.add(buf, (err, result) => { // Upload buffer to IPFS
         if(err) {
           console.error(err)
           return
         }
-        */
-        //let url = `https://ipfs.io/ipfs/${result[0].hash}`
+        
+        let url = `https://ipfs.io/ipfs/${result[0].hash}`
         //let url = `http://localhost:8080/ipfs/${result[0].hash}`	//for test at local
-        //let hash_img = `${result[0].hash}`;
-        //setItem('${result[0].hash}');
+        let hash_img = `${result[0].hash}`;
+        setItem(hash_img);
         
         /*console.log(`Url --> ${url}`)
         document.getElementById("url").innerHTML= url
@@ -131,17 +132,19 @@ function getLink(addr) {
     //}
   }
 
-	function setItem() {
+	function setItem(hash_image) {
 		//var username = document.getElementById('name').value;
 	  //var voted = document.getElementById('voted').value;
 	  var txid;
 	  var teststr = "abc";
 	  	  
-	  decentar.registerItem(0, "name_spark", "time100", "loc159", "hash2nlflasjdfl", function(e,r){
+	  decentar.registerItem(0, "name_spark", "time100", "loc159", hash_image, function(e,r){
 	  	document.getElementById('uploadresult').innerHTML = "업로드 완료";
 	  });
 	  	
-	    	
+	  	
+	  	
+	  	
 	  	
 	  decentar.getTotalListLength(function(e,r){
 	 	    document.getElementById('Nitems').innerHTML = r;
