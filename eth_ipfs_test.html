@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JavaScript file upload</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <script src="https://wzrd.in/standalone/buffer"></script>
+    <script src="https://unpkg.com/ipfs-api@9.0.0/dist/index.js"
+    integrity="sha384-5bXRcW9kyxxnSMbOoHzraqa7Z0PQWIao+cgeg327zit1hz5LZCEbIMx/LWKPReuB"
+    crossorigin="anonymous"></script>
+    <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
+  </head>
+  <script type="text/javascript">
+
+    var hash_img;
+
+    function upload() {
+      const reader = new FileReader();
+      reader.onloadend = function() {
+        //const ipfs = window.IpfsApi('localhost', 5001) // Connect to IPFS
+        const ipfs = window.IpfsApi('ipfs.infura.io', '5001', {protocol: 'https'});
+        const buf = buffer.Buffer(reader.result); // Convert data into buffer
+        ipfs.files.add(buf, (err, result) => { // Upload buffer to IPFS
+          if(err) {
+            console.error(err)
+            return
+          }
+          let url = `https://ipfs.io/ipfs/${result[0].hash}`
+          hash_img = url;
+          console.log(`Url --> ${url}`)
+          document.getElementById("url").innerHTML= url
+          document.getElementById("url").href= url
+          document.getElementById("output").src = url
+        })
+      }
+      //setItem(hash_img);
+      const photo = document.getElementById("photo");
+      reader.readAsArrayBuffer(photo.files[0]); // Read Provided File
+    }
+
+    var decentarContract;
+    var decentar;
+
+    window.addEventListener('load', function() {
+      // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+      if (typeof web3 !== 'undefined') {
+        // Use Mist/MetaMask's provider
+        window.web3 = new Web3(web3.currentProvider);
+      } else {
+        console.log('No web3? You should consider trying MetaMask!')
+        // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+        //window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        //window.web3 = new Web3(new Web3.providers.WebsocketProvider("wss://mainnet.infura.io/ws"));
+        window.web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/207f7e69ea9c48be88d2c17a90c51a07"));
+      }
+      // Now you can start your app & access web3 freely:
+      startApp();
+    });
+
+    function startApp() {
+
+      var contractAddress = '0x41aff8a5d06785eeb30a07086c0094118957ece9';
+      var abi = [{"constant":true,"inputs":[],"name":"getOwnder","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getItem","outputs":[{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getTotalListLength","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getN_items_ofMine","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getItem_ofMine","outputs":[{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_id_tab","type":"uint256"},{"name":"_name","type":"string"},{"name":"_time","type":"string"},{"name":"_location","type":"string"},{"name":"_hash_image","type":"string"}],"name":"registerItem","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}];
+
+      decentarContract = web3.eth.contract(abi);
+      decentar = decentarContract.at(contractAddress);
+      //document.getElementById('contractAddr').innerHTML = getLink(contractAddress);
+      web3.eth.getAccounts(function(e,r){
+      //document.getElementById('accountAddr').innerHTML = getLink(r[0]);
+      });
+
+    }
+
+    function storeHash() {
+      //var hash_img = 'testhash34dfsg345';
+      setItem(hash_img);
+    }
+
+    function setItem(hash_image) {
+
+      document.getElementById('ipfshash').innerHTML = hash_image;
+
+      //var username = document.getElementById('name').value;
+      //var voted = document.getElementById('voted').value;
+      var txid;
+      var teststr = 'abc';
+      //hash_image = teststr;
+
+      //decentar.registerItem(0, "name_spark", "time100", "loc159", hash_image, function(e,r){
+           //document.getElementById('uploadresult').innerHTML = "업로드 완료";
+      //});
+
+      //decentar.getTotalListLength(function(e,r){
+           //document.getElementById('Nitems').innerHTML = r;
+      //});
+    }
+
+  </script>
+  <body>
+    <form action="/">
+      <fieldset>
+        <legend>Upload photo</legend>
+        <input type="file" name="photo" id="photo">
+        <button type="button" onclick="upload()">Upload</button>
+        <button type="button" onclick="storeHash()">Store Hash to Blockchain</button>
+      </fieldset>
+    </form>
+    </br>
+    </br>
+    <a id="url"></a>
+    </br>
+    </br>
+    <img id="output">
+    <a id="ipfshash"></a>
+  </body>
+</html>
