@@ -12,6 +12,9 @@
   <script type="text/javascript">
 
     var hash_img;
+    var arr_b_time = [];
+    var arr_hash_img = [];
+    var id_item = 0;
 
     function upload() {
       const reader = new FileReader();
@@ -79,21 +82,37 @@
 
     function setItem(hash_image) {
 
-      document.getElementById('ipfshash').innerHTML = hash_image;
+      //document.getElementById('ipfshash').innerHTML = hash_image;
 
       //var username = document.getElementById('name').value;
       //var voted = document.getElementById('voted').value;
       var txid;
-      var teststr = 'abc';
+      //var teststr = 'abc';
       //hash_image = teststr;
+      int N_items;
 
       decentar.registerItem(0, "name_spark", "time100", "loc159", hash_image, function(e,r){
-           //document.getElementById('uploadresult').innerHTML = "업로드 완료";
+           //document.getElementById('uploadresult').innerHTML = "업로드 완료";           
       });
 
-      //decentar.getTotalListLength(function(e,r){
-           //document.getElementById('Nitems').innerHTML = r;
-      //});
+      decentar.getTotalListLength(function(e,r){
+           N_items = r;
+      });
+      for (int i=0;i<N_items;i++){
+        decentar.getItem(i, function(e,r){
+          arr_b_time[i] = r[0];
+          arr_hash_img[i] = r[2];
+          
+        }
+      }
+    }
+                         
+    function showItem() {          
+          document.getElementById('blocktime').innerHTML = arr_b_time[id_item];
+          document.getElementById('ipfshash').innerHTML = arr_hash_img[id_item];
+          document.getElementById("showphoto").src = arr_hash_img[id_item];
+          id_item++;
+          if(id_item==N_items) id_item = 0;
     }
 
   </script>
@@ -104,6 +123,7 @@
         <input type="file" name="photo" id="photo">
         <button type="button" onclick="upload()">Upload</button>
         <button type="button" onclick="storeHash()">Store Hash to Blockchain</button>
+        <button type="button" onclick="showItem()">Show Item One-by-one</button>
       </fieldset>
     </form>
     </br>
@@ -112,6 +132,9 @@
     </br>
     </br>
     <img id="output">
+    <p>image info</p>
+    <a id="blocktime">: block time</a>
     <a id="ipfshash"></a>
+    <img id="showphoto">
   </body>
 </html>
