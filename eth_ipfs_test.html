@@ -98,7 +98,7 @@
       decentar.getTotalListLength(function(e,r){
            N_items = r;
       });
-      for (int i=0;i<N_items;i++){
+      for (var i=0;i<N_items;i++){
         decentar.getItem(i, function(e,r){
           arr_b_time[i] = r[0];
           arr_hash_img[i] = r[2];
