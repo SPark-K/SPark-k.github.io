@@ -102,6 +102,7 @@
       
       decentar.getTotalListLength(function(e,r){
            N_items = r;
+          document.getElementById('totalitems').innerHTML = N_items;
       });
       
       for (var i=0;i<N_items;i++){
@@ -138,6 +139,7 @@
     </br>
     <img id="output">
     <p>image info</p>
+    <a id="totalitems">: total item numbers</a>
     <a id="blocktime">: block time</a>
     <a id="ipfshash"></a>
     <img id="showphoto">
