@@ -80,15 +80,6 @@
           document.getElementById('totalitems').innerHTML = N_items;
       });
 
-      for (var i=0;i<N_items;i++){
-        decentar.getItem(i, function(e,r){
-          arr_b_time[i] = r[0];
-          arr_hash_img[i] = r[2];
-          document.getElementById('blocktime').innerHTML = arr_b_time[i];
-          document.getElementById('ipfshash').innerHTML = arr_hash_img[i];
-        });
-      }
-      
     }
 
     function storeHash() {
@@ -114,11 +105,18 @@
     }
                          
     function showItem() {   
+      
+      decentar.getItem(id_item, function(e,r){
+        arr_b_time[id_item] = r[0];
+        arr_hash_img[id_item] = r[2];
+        document.getElementById('itemid').innerHTML = id_item;
+        document.getElementById('blocktime').innerHTML = arr_b_time[id_item];
+        document.getElementById('ipfshash').innerHTML = arr_hash_img[id_item];
+        document.getElementById("showphoto").src = arr_hash_img[id_item];
+      }); 
             
       document.getElementById("output").src = " ";
-      document.getElementById('blocktime').innerHTML = arr_b_time[id_item];
-      document.getElementById('ipfshash').innerHTML = arr_hash_img[id_item];
-      //document.getElementById("showphoto").src = arr_hash_img[id_item];
+     
       id_item++;
       if(id_item==N_items) id_item = 0;
     }
