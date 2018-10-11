@@ -13,6 +13,7 @@
 
     var hash_img;
     var arr_b_time = new Array(10);
+    var arr_location = new Array(10);
     var arr_hash_img = new Array(10);
     var id_item = 0;
     var N_items;
@@ -113,9 +114,11 @@
       
       decentar.getItem(id_item, function(e,r){
         arr_b_time[id_item] = r[0];
+        arr_location[id_item] = r[1];
         arr_hash_img[id_item] = r[2];
         document.getElementById('itemid').innerHTML = id_item;
         document.getElementById('blocktime').innerHTML = arr_b_time[id_item];
+        document.getElementById('location').innerHTML = arr_location[id_item];
         document.getElementById('ipfshash').innerHTML = arr_hash_img[id_item];
         document.getElementById("showphoto").src = arr_hash_img[id_item];
       }); 
@@ -145,9 +148,27 @@
     <img id="output" height="200">
     <p>image info</p>
     <a id="totalitems">: total item numbers</a>
-    <a id="itemid"></a>
+    <!--<a id="itemid"></a>
     <a id="blocktime">: block time</a>
     <a id="ipfshash"></a>
-    <img id="showphoto" height="200">
+    <img id="showphoto" height="200">-->
+
+  <table style="width:50%">
+	  <tr>
+	    <th>Item ID</th>
+	    <th>Time (block.timestamp)</th> 
+	    <th>Location (TBD: QR code ID?)</th>
+	    <th size="50" >IPFS hash</th>
+	    <th>Image</th>
+	  </tr>
+	  <tr>
+	    <td><a id="itemid"></a></td>
+	    <td><a id="blocktime"</a></td> 
+	    <td><a id="location"</a></td>
+	    <td><a id="ipfshash"</a></td>  
+	    <td><img id="showphoto" height="100">
+	    </td>
+	  </tr>
+	</table>
   </body>
 </html>
