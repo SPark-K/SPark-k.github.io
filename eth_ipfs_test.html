@@ -106,6 +106,11 @@
                          
     function showItem() {   
       
+      decentar.getTotalListLength(function(e,r){
+           N_items = r;
+          document.getElementById('totalitems').innerHTML = N_items;
+      });
+      
       decentar.getItem(id_item, function(e,r){
         arr_b_time[id_item] = r[0];
         arr_hash_img[id_item] = r[2];
