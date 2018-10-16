@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JavaScript file upload</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <!--<script src="https://wzrd.in/standalone/buffer"></script>-->
+    <script src="https://unpkg.com/ipfs-api@9.0.0/dist/index.js"
+    integrity="sha384-5bXRcW9kyxxnSMbOoHzraqa7Z0PQWIao+cgeg327zit1hz5LZCEbIMx/LWKPReuB"
+    crossorigin="anonymous"></script>
+    <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
+  </head>
+  <style>
+	  table, th, td { border: 1px solid black; }
+  </style>
+  <script type="text/javascript">
+    var hash_img;
+    // var arr_b_time = new Array(10);
+    // var arr_location = new Array(10);
+    // var arr_hash_img = new Array(10);
+    var arr_b_time;
+    var arr_location;
+    var arr_hash_img;
+    var id_item = 0;
+    var N_items;
+    function upload() {
+      const reader = new FileReader();
+      reader.onloadend = function() {
+        //const ipfs = window.IpfsApi('localhost', 5001) // Connect to IPFS
+        const ipfs = window.IpfsApi('ipfs.infura.io', '5001', {protocol: 'https'});
+        const Buffer = ipfs.Buffer;
+        const buf = Buffer(reader.result);  //Convert data into buffer
+        //const buf = buffer.Buffer(reader.result); // Convert data into buffer
+        ipfs.files.add(buf, (err, result) => { // Upload buffer to IPFS
+          if(err) {
+            console.error(err)
+            return
+          }
+          let url = `https://ipfs.io/ipfs/${result[0].hash}`
+          hash_img = url;
+          console.log(`Url --> ${url}`)
+          document.getElementById("url").innerHTML= url
+          document.getElementById("url").href= url
+          document.getElementById("output").src = url
+        })
+      }
+      //setItem(hash_img);
+      const photo = document.getElementById("photo");
+      reader.readAsArrayBuffer(photo.files[0]); // Read Provided File
+    }
+    var decentarContract;
+    var decentar;
+    window.addEventListener('load', function() {
+      // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+      if (typeof web3 !== 'undefined') {
+        // Use Mist/MetaMask's provider
+        window.web3 = new Web3(web3.currentProvider);
+      } else {
+        console.log('No web3? You should consider trying MetaMask!')
+        // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+        //window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        //window.web3 = new Web3(new Web3.providers.WebsocketProvider("wss://mainnet.infura.io/ws"));
+        window.web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/207f7e69ea9c48be88d2c17a90c51a07"));
+      }
+      // Now you can start your app & access web3 freely:
+      startApp();
+    });
+    function startApp() {
+      var contractAddress = '0xd1780a5cce46ed07119d1cdf8da8c04800f11c09';
+      var abi = [{"constant":true,"inputs":[],"name":"getOwnder","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getItem","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getTotalListLength","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getN_items_ofMine","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getItem_ofMine","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_id_tab","type":"uint256"},{"name":"_name","type":"string"},{"name":"_time","type":"string"},{"name":"_location","type":"string"},{"name":"_hash_image","type":"string"}],"name":"registerItem","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}];
+      decentarContract = web3.eth.contract(abi);
+      decentar = decentarContract.at(contractAddress);
+      //document.getElementById('contractAddr').innerHTML = getLink(contractAddress);
+      web3.eth.getAccounts(function(e,r){
+      //document.getElementById('accountAddr').innerHTML = getLink(r[0]);
+      });
+
+      id_item = 0;
+      decentar.getTotalListLength(function(e,r){
+           N_items = r;
+          document.getElementById('totalitems').innerHTML = N_items;
+      });
+    }
+    function storeHash() {
+      //var hash_img = 'testhash34dfsg345';
+      setItem(hash_img);
+    }
+    function setItem(hash_image) {
+      //document.getElementById('ipfshash').innerHTML = hash_image;
+      //var username = document.getElementById('name').value;
+      //var voted = document.getElementById('voted').value;
+      var txid;
+      //var teststr = 'abc';
+      //hash_image = teststr;
+
+      decentar.registerItem(0, "name_spark", "time100", "loc159", hash_image, function(e,r){
+           //document.getElementById('uploadresult').innerHTML = "업로드 완료";
+      });
+
+    }
+
+    function showItem() {
+
+      decentar.getTotalListLength(function(e,r){
+           N_items = r;
+          document.getElementById('totalitems').innerHTML = N_items;
+
+          arr_b_time = new Array(N_items);
+          arr_location = new Array(N_items);
+          arr_hash_img = new Array(N_items);
+      });
+
+      //for(var i=0;i<N_items;i++){
+        decentar.getItem(id_item, function(e,r){
+          arr_b_time[id_item] = r[0];
+          arr_location[id_item] = r[1];
+          arr_hash_img[id_item] = r[2];
+          document.getElementById('itemid').innerHTML = id_item;
+          document.getElementById('blocktime').innerHTML = arr_b_time[id_item];
+          document.getElementById('location').innerHTML = arr_location[id_item];
+          document.getElementById('ipfshash').innerHTML = arr_hash_img[id_item];
+          document.getElementById('showphoto').src = arr_hash_img[id_item];
+        });
+    //  }
+
+      document.getElementById("output").src = " ";
+
+      id_item++;
+      if(id_item==N_items) id_item = 0;
+    }
+
+  function dynamictable(form){
+    var oCurrentRow,oCurrentCell;
+    var sAddingHtml;
+
+
+    decentar.getTotalListLength(function(e,r){
+         N_items = r;
+        document.getElementById('totalitems').innerHTML = N_items;
+
+        arr_b_time = new Array(N_items);
+        arr_location = new Array(N_items);
+        arr_hash_img = new Array(N_items);
+    });
+
+    var r;
+    var strHTML;
+    for(var i=0;i<N_items;i++)
+    {
+      oCurrentRow = insertTable.insertRow();
+      rowIndex = oCurrentRow.rowIndex;
+      oCurrentCell = oCurrentRow.insertCell();
+      rowIndex++;
+
+      strHTML =  "<tr align='center'>";
+      strHTML += "<td width='50'>"+ rowIndex +"</td>";
+      strHTML += "<td width='50'>"+ "<a id='itemid"+i.toString()+"'></a>" +"</td>";
+      strHTML += "<td width='50'>"+ "<a id='blocktime"+i.toString()+"'></a>" +"</td>";
+      // strHTML += "<td width='50'>"+ "<a id='location"+r+"'></a>" +"</td>";
+      // strHTML += "<td width='50'>"+ "<a id='ipfshash"+r+"'></a>" +"</td>";
+      // strHTML += "<td width='50'>"+ "<img id='showphoto'"+r+"' height="100"></a>" +"</td>";
+      strHTML += "</tr>";
+
+      oCurrentCell.innerHTML = strHTML;
+      form.rowCount.value = rowIndex;
+    }
+
+
+    // for(var i=0;i<N_items;i++){
+    //   decentar.getItem(i, function(e,r){
+    //     arr_b_time[i] = r[0];
+    //     arr_location[i] = r[1];
+    //     arr_hash_img[i] = r[2];
+    //   });
+    // }
+var i=1;
+    //for(var i=0;i<5;i++){
+        // decentar.getItem(i).then(function(ret){
+        //     arr_b_time[i] = ret[0];
+        // });
+    //}
+
+    decentar.getItem(i, function(e,r){
+      arr_b_time[i] = r[0];
+      arr_location[i] = r[1];
+      arr_hash_img[i] = r[2];
+    });
+  }
+
+  function write_html(form)
+  {
+    // document.getElementById('itemid').innerHTML = "ha";
+    // document.getElementById('itemid1').innerHTML = "ha1";
+    // document.getElementById('itemid2').innerHTML = "haha";
+    // document.getElementById('itemid3').innerHTML = "hahaha";
+
+    //document.getElementById('blocktime1').innerHTML = "btime1";
+
+    //document.getElementById('itemid').innerHTML = "ha";
+
+    // decentar.getTotalListLength(function(e,r){
+    //      N_items = r;
+    //     document.getElementById('totalitems').innerHTML = N_items;
+    // });
+
+    // for(var i=0;i<N_items;i++){
+    //   decentar.getItem(i, function(e,r){
+    //     arr_b_time[i] = r[0];
+    //     arr_location[i] = r[1];
+    //     arr_hash_img[i] = r[2];
+    //     //document.getElementById('itemid'+i).innerHTML = i;
+    //     //document.getElementById('blocktime'+i.toString()).innerHTML = arr_b_time[i];
+    //     // document.getElementById('location'+i.toString()).innerHTML = arr_location[i];
+    //     // document.getElementById('ipfshash'+i.toString()).innerHTML = arr_hash_img[i];
+    //     // document.getElementById('showphoto'+i.toString()).src = arr_hash_img[i];
+    //   });
+    // }
+
+    // for(var i=0;i<N_items;i++){
+    //   document.getElementById('itemid'+i).innerHTML = i;
+    //   document.getElementById('blocktime'+i).innerHTML = arr_b_time[i];
+    // }
+
+    document.getElementById('totalitems').innerHTML = arr_b_time[1];
+
+
+
+    // var hoverInv = document.getElementsByClassName("hoverinv");
+    // for (var i=0; i<hoverInv.length; i++){
+    //      hoverInv[i].style.display = "";
+    // }
+  }
+
+  </script>
+  <body>
+    <form action="/">
+      <fieldset>
+        <legend>Upload photo</legend>
+        <input type="file" name="photo" id="photo">
+        <button size='15' type="button" onclick="upload()">Upload</button>
+        <button type="button" onclick="storeHash()">Store Hash to Blockchain</button>
+        <button type="button" onclick="showItem()">Show Item One-by-one</button>
+
+      </fieldset>
+    </form>
+    </br>
+    </br>
+    <a id="url"></a>
+    </br>
+    </br>
+    <img id="output" height="200">
+    <p>image info</p>
+    <a id="totalitems">: Numbers of total item</a>
+    <!--<a id="itemid"></a>
+    <a id="blocktime">: block time</a>
+    <a id="ipfshash"></a>
+    <img id="showphoto" height="200">-->
+
+  <table style="width:50%">
+	  <tr>
+	    <th>Item ID</th>
+	    <th>Time (block.timestamp)</th>
+	    <th>Location (TBD: QR code ID?)</th>
+	    <th>IPFS hash</th>
+	    <th>Image</th>
+	  </tr>
+	  <tr>
+	    <td><a id="itemid"></a></td>
+	    <td><a id="blocktime"</a></td>
+	    <td><a id="location"</a></td>
+	    <td><a id="ipfshash"</a></td>
+	    <td><img id="showphoto" height="100"></td>
+	  </tr>
+	</table>
+
+  <!-- <form name="write">
+      <table name='insertTable' id='insertTable' border=1 cellpadding=10 cellspacing=10>
+
+      </table>
+      <input type="button" value="Show Full List" onClick="dynamictable(write,1)" border=0 style='cursor:hand'>
+      <input type="button" value="보이기" onClick='write_html(write)' border=0 style='cursor:hand'>
+      <input type="hidden" name="rowCount" value="1">
+  </form> -->
+
+  <form name="write">
+      <table name='insertTable' id='insertTable' border=1 cellpadding=1 cellspacing=1>
+
+      </table>
+      <input type="button" value="추가" onClick="dynamictable(write)" border=0 style='cursor:hand'>
+      <input type="button" value="보이기" onClick='write_html(write)' border=0 style='cursor:hand'>
+      <input type="hidden" name="rowCount" value="1">
+  </form>
+
+  </body>
+</html>
