@@ -161,7 +161,7 @@
       oCurrentCell.innerHTML = strHTML;
       form.rowCount.value = rowIndex;
     }
-    
+
      //for(var i=0;i<N_items;i++)
      {
 /*       decentar.getItem(i, function(e,r){
@@ -169,14 +169,14 @@
          arr_location[i] = r[1];
          arr_hash_img[i] = r[2];
        });*/
-       
+
        /*decentar.methods.getItem.call(i, function(e,r)
        {
          arr_b_time[i] = r[0];
          arr_location[i] = r[1];
          arr_hash_img[i] = r[2];
        });*/
-       
+
 /*       return new Promise((resolve, reject) => {
 				  decentar.getItem.call(function (error, result) {
 				    if (error) {
@@ -186,42 +186,41 @@
 				    }
 				  });
 				}) as Promise<number>;*/
-				
 
 			// getData()의 실행이 끝나면 호출되는 then()
 /*			getData(i).then(function (tableData) {
 			  // resolve()의 결과 값이 여기로 전달됨
 			  console.log(tableData); // $.get()의 reponse 값이 tableData에 전달됨
 			});*/
-			var a,b,c;
-			getData().then(function (data) {
-			  console.log(data[1]); // response 값 출력
-/*			  arr_b_time[i] = data[0];
-        arr_location[i] = data[1];
-        arr_hash_img[i] = data[2];*/
-        
-       /*document.getElementById('blocktime'+i.toString()).innerHTML = data[0];
-       document.getElementById('location'+i.toString()).innerHTML = data[1];
-       document.getElementById('ipfshash'+i.toString()).innerHTML = data[2];
-       document.getElementById('showphoto'+i.toString()).src = data[2];*/
-       
-       //document.getElementById('totalitem').innerHTML = "hahaha";
-       console.log(data[2]); // response 값 출력
-        
-/*        a = data[0];
-        b = data[1];
-        c = data[2];*/
-        
-			}).catch(function (err) {
-			  console.error(err); // Error 출력
-			});
-			
+// 			var a,b,c;
+// 			getData().then(function (data) {
+// 			  console.log(data[1]); // response 값 출력
+// /*			  arr_b_time[i] = data[0];
+//         arr_location[i] = data[1];
+//         arr_hash_img[i] = data[2];*/
+//
+//        /*document.getElementById('blocktime'+i.toString()).innerHTML = data[0];
+//        document.getElementById('location'+i.toString()).innerHTML = data[1];
+//        document.getElementById('ipfshash'+i.toString()).innerHTML = data[2];
+//        document.getElementById('showphoto'+i.toString()).src = data[2];*/
+//
+//        //document.getElementById('totalitem').innerHTML = "hahaha";
+//        console.log(data[2]); // response 값 출력
+//
+// /*        a = data[0];
+//         b = data[1];
+//         c = data[2];*/
+//
+// 			}).catch(function (err) {
+// 			  console.error(err); // Error 출력
+// 			});
+
 			/*arr_b_time[i] = a;
       arr_location[i] = b;
       arr_hash_img[i] = c;
       console.log(c);*/
-      
-       
+
+
        //ref 'Premise'
        /*return new Promise((resolve, reject) => {
 				  contractInstance.**yourMethod**.call(function (error, result) {
@@ -239,7 +238,7 @@
         //     arr_b_time[i] = ret[0];
         // });
     //}
-    
+
    /* i=3;
     decentar.getItem(i, function(e,r){
       arr_b_time[i] = r[0];
@@ -247,13 +246,50 @@
       arr_hash_img[i] = r[2];
     });*/
   }
-  
+
+function assignid(){
+
+  for(var i=0;i<N_items;i++)
+  {
+     getData().then(function (data) {
+      console.log(i);
+      // console.log(data[1]); // response 값 출력
+    /*			  arr_b_time[i] = data[0];
+      arr_location[i] = data[1];
+      arr_hash_img[i] = data[2];*/
+
+     document.getElementById('blocktime'+i.toString()).innerHTML = data[0];
+     document.getElementById('location'+i.toString()).innerHTML = data[1];
+     document.getElementById('ipfshash'+i.toString()).innerHTML = data[2];
+     document.getElementById('showphoto'+i.toString()).src = data[2];
+
+     // document.getElementById('blocktime'+i.toString()).innerHTML = "A";
+     // document.getElementById('location'+i.toString()).innerHTML = "B";
+     // document.getElementById('ipfshash'+i.toString()).innerHTML = "C";
+     // document.getElementById('showphoto'+i.toString()).src = "D";
+
+     //document.getElementById('totalitem').innerHTML = "hahaha";
+     // console.log(data[2]); // response 값 출력
+
+    /*        a = data[0];
+      b = data[1];
+      c = data[2];*/
+
+    }).catch(function (err) {
+      console.error(err); // Error 출력
+    });
+    }
+
+  }
+}
+
+
 /*  async function get_item(var i)
   {
-  	
+
   }*/
-  
-  function getData() 
+
+  function getData()
   {
   	/*var i=2;
 	  // new Promise() 추가
@@ -264,7 +300,7 @@
 	      	resolve(response);
 	      else
 	      	reject(new Error("Failed"));
-	      		
+
 	    });
 	  });*/
 	  var i=5;
@@ -278,7 +314,7 @@
 	  });
 })
 	}
-  
+
   function write_html(form)
   {
     // document.getElementById('itemid').innerHTML = "ha";
@@ -303,7 +339,7 @@
     //     // document.getElementById('showphoto'+i.toString()).src = arr_hash_img[i];
     //   });
     // }
-    
+
      //console.log(arr_hash_img[8]);
      for(var i=0;i<N_items;i++){
        document.getElementById('itemid'+i.toString()).innerHTML = i;
@@ -369,13 +405,14 @@
   </form> -->
 
   <form name="write">
-  		<input type="button" value="Add" onClick="dynamictable(write)" border=0 style='cursor:hand'>
+  		<input type="button" value="Make Table" onClick="dynamictable(write)" border=0 style='cursor:hand'>
+      <input type="button" value="Assign ID" onClick="assignid(write)" border=0 style='cursor:hand'>
       <input type="button" value="Show" onClick='write_html(write)' border=0 style='cursor:hand'>
       <input type="hidden" name="rowCount" value="1">
       <table name='insertTable' id='insertTable' border=1 cellpadding=1 cellspacing=1 style="width:50%">
 
       </table>
-      
+
   </form>
 
   </body>
