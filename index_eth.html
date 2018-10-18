@@ -8,6 +8,7 @@
     integrity="sha384-5bXRcW9kyxxnSMbOoHzraqa7Z0PQWIao+cgeg327zit1hz5LZCEbIMx/LWKPReuB"
     crossorigin="anonymous"></script>
     <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
+    <!--<script src="./web3.js"></script>-->
   </head>
   <style>
 	  table, th, td { border: 1px solid black; }
@@ -17,13 +18,12 @@
 /*     var arr_b_time = new Array(20);
      var arr_location = new Array(20);
      var arr_hash_img = new Array(20);*/
-     var arr_b_time;
-     var arr_location;
-     var arr_hash_img;
-    var arr_b_time;
-    var arr_location;
-    var arr_hash_img;
-    var id_item = 0;
+	   var arr_cat_id;
+	   var arr_b_time;
+	   var arr_location;
+	   var arr_qr_code;
+	   var arr_hash_img;
+   
     var N_items;
     function upload() {
       const reader = new FileReader();
@@ -91,54 +91,38 @@
     }
     
     function storeHash() {
-      setItem(hash_img);
+      setItem(0, hash_img);
     }
     
-    function setItem(hash_image) {
-
-      var cat_id = 0;
+    function setItem(cat_id, hash_image) {
+    	
+    	//get GPS
+    	//arr_location = *GPS_info*;
+    	arr_location = "GPS@%BDFG#$@#$534095830";
+    	
+    	//get QR code
+    	//arr_qr_code = *QR_info*;
+    	arr_qr_code = "567";
+    	
 
       decentar.registerItem(cat_id, "name_spark", "time100", "loc159", hash_image, function(e,r){
-           //document.getElementById('uploadresult').innerHTML = "Upload 완료";
+           document.getElementById('uploadresult').innerHTML = "Upload 완료";
       });
     }
     
-    function showItem() {
-      decentar.getTotalListLength(function(e,r){
-           N_items = r;
-          document.getElementById('totalitems').innerHTML = N_items;
-          arr_b_time = new Array(N_items);
-          arr_location = new Array(N_items);
-          arr_hash_img = new Array(N_items);
-      });
-      
-      decentar.getItem(id_item, function(e,r){
-        arr_b_time[id_item] = r[0];
-        arr_location[id_item] = r[1];
-        arr_hash_img[id_item] = r[2];
-        document.getElementById('itemid').innerHTML = id_item;
-        document.getElementById('blocktime').innerHTML = arr_b_time[id_item];
-        document.getElementById('location').innerHTML = arr_location[id_item];
-        document.getElementById('ipfshash').innerHTML = arr_hash_img[id_item];
-        document.getElementById('showphoto').src = arr_hash_img[id_item];
-      });
-
-      document.getElementById("output").src = " ";
-      id_item++;
-      if(id_item==N_items) id_item = 0;
-    }
   function dynamictable(form){
     var oCurrentRow,oCurrentCell;
     var sAddingHtml;
-    decentar.getTotalListLength(function(e,r){
-         N_items = r;
-        document.getElementById('totalitems').innerHTML = N_items;
-        /*arr_b_time = new Array(N_items);
-        arr_location = new Array(N_items);
-        arr_hash_img = new Array(N_items);*/
-    });
-    
     var strHTML;
+//    decentar.getTotalListLength(function(e,r){
+//         N_items = r;
+//        document.getElementById('totalitems').innerHTML = N_items;
+//        /*arr_b_time = new Array(N_items);
+//        arr_location = new Array(N_items);
+//        arr_hash_img = new Array(N_items);*/
+//    });
+    
+    
     strHTML = "	  <tr>";
 	  strHTML +=  "<th>Item ID</th>";
 	  strHTML +=  "<th>Timestamp</th>";
@@ -171,13 +155,17 @@
 
       form.rowCount.value = rowIndex;
     }
+    
+    write_html();
+    
+    
  
   }
-function storedata(form){
+function storedata(){
   for(var i=0;i<N_items;i++)
   {
      getData(i).then(function (data) {
-      console.log(i);
+      //console.log(i);
       console.log(data);
 
     }).catch(function (err) {
@@ -196,7 +184,32 @@ function storedata(form){
 
      //write_html(form)
   }
+  
+/*  window.addEventListener('load', function() {
+  	write_html(form);
+  });*/
 }
+
+function asyncshowData(form)
+{
+	return new Promise((resolve, reject) => {
+		  storedata( function (error, result) {
+		    if (error) {
+		      console.log(error);
+		    } else {
+		    	
+		    	setTimeout(function () { 
+					    console.log('make table');
+					    dynamictable(form);
+					}, 500);
+		    	
+		      resolve(result);
+		    }
+	  });
+	})
+}
+
+
 
   function getData(i)	
   {
@@ -212,9 +225,9 @@ function storedata(form){
 		      resolve(result);
 		    }
 	  });
-})
+   })
 	}
-  function write_html(form)
+  function write_html()
   {
      for(var i=0;i<N_items;i++){
        document.getElementById('itemid'+i.toString()).innerHTML = i;
@@ -223,11 +236,6 @@ function storedata(form){
        document.getElementById('ipfshash'+i.toString()).innerHTML = arr_hash_img[i];
        document.getElementById('showphoto'+i.toString()).src = arr_hash_img[i];
      }
-    
-     /*var hoverInv = document.getElementsByClassName("hoverinv");
-     for (var i=0; i<hoverInv.length; i++){
-          hoverInv[i].style.display = "";
-     }*/
   }
   </script>
   <body>
@@ -241,40 +249,19 @@ function storedata(form){
 
       </fieldset>
     </form>
-<!--    </br>
-    </br>
-    <a id="url"></a>
-    </br>
-    </br>
-    <img id="output" height="200">-->
-    <p>image info</p>
-    <a id="totalitems">: Numbers of total item</a>
-    <!--<a id="itemid"></a>
-    <a id="blocktime">: block time</a>
-    <a id="ipfshash"></a>
-    <img id="showphoto" height="200">-->
 
-<!--  <table style="width:50%">
-	  <tr>
-	    <th>Item ID</th>
-	    <th>Time (block.timestamp)</th>
-	    <th>Location (TBD: QR code ID?)</th>
-	    <th>IPFS hash</th>
-	    <th>Image</th>
-	  </tr>
-	  <tr>
-	    <td><a id="itemid"></a></td>
-	    <td><a id="blocktime"</a></td>
-	    <td><a id="location"</a></td>
-	    <td><a id="ipfshash"</a></td>
-	    <td><img id="showphoto" height="100"></td>
-	  </tr>
-	</table>-->
+		<p>Uploaded image info</p>
+		<a id="uploadresult"></a>
+    <a id="url"></a>
+    <img id="output" height="100">
+    
+    <p>Image List</p>
+    <a id="totalitems">: Numbers of total item</a>
 
   <form name="write">
+  	  <input type="button" value="Download Data" onClick="asyncshowData(write)" border=0 style='cursor:hand'>
   		<input type="button" value="Make Table" onClick="dynamictable(write)" border=0 style='cursor:hand'>
-      <input type="button" value="Store Data" onClick="storedata(write)" border=0 style='cursor:hand'>
-      <input type="button" value="Show" onClick='write_html(write)' border=0 style='cursor:hand'>
+      <!--<input type="button" value="Show" onClick='write_html()' border=0 style='cursor:hand'>-->
       <input type="hidden" name="rowCount" value="1">
       <table name='insertTable' id='insertTable' border=1 cellpadding=1 cellspacing=1 style="width:50%">
 
