@@ -23,7 +23,7 @@
 	   var arr_location;
 	   var arr_qr_code;
 	   var arr_hash_img;
-   
+
     var N_items;
     function upload() {
       const reader = new FileReader();
@@ -67,7 +67,7 @@
       // Now you can start your app & access web3 freely:
       startApp();
     });
-    
+
     function startApp() {
       var contractAddress = '0xd1780a5cce46ed07119d1cdf8da8c04800f11c09';
       var abi = [{"constant":true,"inputs":[],"name":"getOwnder","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getItem","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getTotalListLength","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getN_items_ofMine","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getItem_ofMine","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_id_tab","type":"uint256"},{"name":"_name","type":"string"},{"name":"_time","type":"string"},{"name":"_location","type":"string"},{"name":"_hash_image","type":"string"}],"name":"registerItem","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}];
@@ -81,35 +81,35 @@
       decentar.getTotalListLength(function(e,r){
            N_items = r;
           document.getElementById('totalitems').innerHTML = N_items;
+          asyncshowData(write);
       });
-      
+
       arr_b_time = new Array(N_items);
       arr_location = new Array(N_items);
       arr_hash_img = new Array(N_items);
-      
+
       //dynamictable(write);
     }
-    
+
     function storeHash() {
       setItem(0, hash_img);
     }
-    
+
     function setItem(cat_id, hash_image) {
-    	
+
     	//get GPS
     	//arr_location = *GPS_info*;
     	arr_location = "GPS@%BDFG#$@#$534095830";
-    	
+
     	//get QR code
     	//arr_qr_code = *QR_info*;
     	arr_qr_code = "567";
-    	
 
       decentar.registerItem(cat_id, "name_spark", "time100", "loc159", hash_image, function(e,r){
            document.getElementById('uploadresult').innerHTML = "Upload 완료";
       });
     }
-    
+
   function dynamictable(form){
     var oCurrentRow,oCurrentCell;
     var sAddingHtml;
@@ -121,8 +121,7 @@
 //        arr_location = new Array(N_items);
 //        arr_hash_img = new Array(N_items);*/
 //    });
-    
-    
+
     strHTML = "	  <tr>";
 	  strHTML +=  "<th>Item ID</th>";
 	  strHTML +=  "<th>Timestamp</th>";
@@ -133,10 +132,10 @@
 	  oCurrentRow = insertTable.insertRow();
     rowIndex = oCurrentRow.rowIndex;
     oCurrentRow.innerHTML = strHTML;
-    
+
     rowIndex++;
     form.rowCount.value = rowIndex;
-	
+
     for(var i=0;i<N_items;i++)
     {
       oCurrentRow = insertTable.insertRow();
@@ -152,14 +151,13 @@
      	strHTML += "<td width='50'>"+ "<img id='showphoto"+i.toString()+"' height='100'></a>" +"</td>";
       strHTML += "</tr>";
       oCurrentRow.innerHTML = strHTML;
-
       form.rowCount.value = rowIndex;
     }
-    
+
     write_html();
-    
-    
- 
+
+
+
   }
 function storedata(){
   for(var i=0;i<N_items;i++)
@@ -167,29 +165,24 @@ function storedata(){
      getData(i).then(function (data) {
       //console.log(i);
       console.log(data);
-
     }).catch(function (err) {
       console.error(err); // Error 출력
     });
 
-    
 /*    getData(i).then(function (data) {
       console.log(i);
       console.log(data);
-
     }).then( write_html(form))
     .catch(function (err) {
       console.error(err); // Error 출력
     });*/
-
      //write_html(form)
   }
-  
+
 /*  window.addEventListener('load', function() {
   	write_html(form);
   });*/
 }
-
 function asyncshowData(form)
 {
 	return new Promise((resolve, reject) => {
@@ -197,21 +190,18 @@ function asyncshowData(form)
 		    if (error) {
 		      console.log(error);
 		    } else {
-		    	
-		    	setTimeout(function () { 
-					    console.log('make table');
-					    dynamictable(form);
-					}, 500);
-		    	
+
+		    	// setTimeout(function () {
+					//     console.log('make table');
+					//     dynamictable(form);
+					// }, 500);
+
 		      resolve(result);
 		    }
 	  });
 	})
 }
-
-
-
-  function getData(i)	
+  function getData(i)
   {
 	  return new Promise((resolve, reject) => {
 		  decentar.getItem.call(i, function (error, result) {
@@ -221,7 +211,7 @@ function asyncshowData(form)
 		    	arr_b_time[i] = result[0];
       		arr_location[i] = result[1];
      			arr_hash_img[i] = result[2];
-		    	
+
 		      resolve(result);
 		    }
 	  });
@@ -254,13 +244,13 @@ function asyncshowData(form)
 		<a id="uploadresult"></a>
     <a id="url"></a>
     <img id="output" height="100">
-    
+
     <p>Image List</p>
     <a id="totalitems">: Numbers of total item</a>
 
   <form name="write">
-  	  <input type="button" value="Download Data" onClick="asyncshowData(write)" border=0 style='cursor:hand'>
-  		<input type="button" value="Make Table" onClick="dynamictable(write)" border=0 style='cursor:hand'>
+  	  <!-- <input type="button" value="Download Data" onClick="asyncshowData(write)" border=0 style='cursor:hand'> -->
+  		<input type="button" value="Show List" onClick="dynamictable(write)" border=0 style='cursor:hand'>
       <!--<input type="button" value="Show" onClick='write_html()' border=0 style='cursor:hand'>-->
       <input type="hidden" name="rowCount" value="1">
       <table name='insertTable' id='insertTable' border=1 cellpadding=1 cellspacing=1 style="width:50%">
