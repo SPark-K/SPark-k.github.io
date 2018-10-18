@@ -24,6 +24,8 @@
 	   var arr_qr_code;
 	   var arr_hash_img;
 
+     var selected_cat_id = 0;
+
     var N_items;
     function upload() {
       const reader = new FileReader();
@@ -49,7 +51,10 @@
       //setItem(hash_img);
       const photo = document.getElementById("photo");
       reader.readAsArrayBuffer(photo.files[0]); // Read Provided File
+
+      //setItem(selected_cat_id, hash_img);
     }
+
     var decentarContract;
     var decentar;
     window.addEventListener('load', function() {
@@ -88,22 +93,21 @@
       arr_location = new Array(N_items);
       arr_hash_img = new Array(N_items);
 
-      //dynamictable(write);
     }
 
     function storeHash() {
-      setItem(0, hash_img);
+      setItem(selected_cat_id, hash_img);
     }
 
     function setItem(cat_id, hash_image) {
 
     	//get GPS
     	//arr_location = *GPS_info*;
-    	arr_location = "GPS@%BDFG#$@#$534095830";
+    	my_location = "GPS@%BDFG#$@#$534095830";
 
     	//get QR code
     	//arr_qr_code = *QR_info*;
-    	arr_qr_code = "567";
+    	my_qr_code = "567";
 
       decentar.registerItem(cat_id, "name_spark", "time100", "loc159", hash_image, function(e,r){
            document.getElementById('uploadresult').innerHTML = "Upload 완료";
@@ -114,13 +118,6 @@
     var oCurrentRow,oCurrentCell;
     var sAddingHtml;
     var strHTML;
-//    decentar.getTotalListLength(function(e,r){
-//         N_items = r;
-//        document.getElementById('totalitems').innerHTML = N_items;
-//        /*arr_b_time = new Array(N_items);
-//        arr_location = new Array(N_items);
-//        arr_hash_img = new Array(N_items);*/
-//    });
 
     strHTML = "	  <tr>";
 	  strHTML +=  "<th>Item ID</th>";
@@ -128,6 +125,7 @@
 	  strHTML +=  "<th>QR code</th>";
 	  strHTML +=  "<th>IPFS hash</th>";
 	  strHTML +=  "<th>Image</th>";
+    strHTML +=  "<th>Add photo</th>";
 	  strHTML +=  "</tr>";
 	  oCurrentRow = insertTable.insertRow();
     rowIndex = oCurrentRow.rowIndex;
@@ -149,6 +147,7 @@
      	strHTML += "<td width='50'>"+ "<a id='location"+i.toString()+"'></a>" +"</td>";
      	strHTML += "<td width='10'>"+ "<a id='ipfshash"+i.toString()+"'></a>" +"</td>";
      	strHTML += "<td width='50'>"+ "<img id='showphoto"+i.toString()+"' height='100'></a>" +"</td>";
+      strHTML += "<td width='50'>"+ "<button size='20' type='button' id='addphoto"+i.toString()+"' onclick='add_photo("+ i.toString() +")'>+</button>" +"</td>";
       strHTML += "</tr>";
       oCurrentRow.innerHTML = strHTML;
       form.rowCount.value = rowIndex;
@@ -156,9 +155,8 @@
 
     write_html();
 
-
-
   }
+
 function storedata(){
   for(var i=0;i<N_items;i++)
   {
@@ -168,21 +166,9 @@ function storedata(){
     }).catch(function (err) {
       console.error(err); // Error 출력
     });
-
-/*    getData(i).then(function (data) {
-      console.log(i);
-      console.log(data);
-    }).then( write_html(form))
-    .catch(function (err) {
-      console.error(err); // Error 출력
-    });*/
-     //write_html(form)
   }
-
-/*  window.addEventListener('load', function() {
-  	write_html(form);
-  });*/
 }
+
 function asyncshowData(form)
 {
 	return new Promise((resolve, reject) => {
@@ -227,11 +213,25 @@ function asyncshowData(form)
        document.getElementById('showphoto'+i.toString()).src = arr_hash_img[i];
      }
   }
+
+  function select_cat(i)
+  {
+    selected_cat_id = i;
+    if(i==0){
+      document.getElementById('cat2').style.visibility = "hidden";
+    }
+    else{
+      document.getElementById('cat1').style.visibility = "hidden";
+    }
+  }
+
   </script>
   <body>
     <form action="/">
       <fieldset>
         <legend>Upload photo</legend>
+        <button id='cat1' size='5' type="button" onclick="select_cat(0)">Cat1</button>
+        <button id='cat2' size='5' type="button" onclick="select_cat(1)">Cat2</button>
         <input type="file" name="photo" id="photo">
         <button size='15' type="button" onclick="upload()">Upload</button>
         <button type="button" onclick="storeHash()">Store Hash to Blockchain</button>
