@@ -14,9 +14,12 @@
   </style>
   <script type="text/javascript">
     var hash_img;
-     var arr_b_time = new Array(20);
+/*     var arr_b_time = new Array(20);
      var arr_location = new Array(20);
-     var arr_hash_img = new Array(20);
+     var arr_hash_img = new Array(20);*/
+     var arr_b_time;
+     var arr_location;
+     var arr_hash_img;
     var arr_b_time;
     var arr_location;
     var arr_hash_img;
@@ -78,42 +81,44 @@
            N_items = r;
           document.getElementById('totalitems').innerHTML = N_items;
       });
+      
+      arr_b_time = new Array(N_items);
+      arr_location = new Array(N_items);
+      arr_hash_img = new Array(N_items);
+      
+      //dynamictable(write);
     }
     function storeHash() {
-      //var hash_img = 'testhash34dfsg345';
       setItem(hash_img);
     }
     function setItem(hash_image) {
-      //document.getElementById('ipfshash').innerHTML = hash_image;
-      //var username = document.getElementById('name').value;
-      //var voted = document.getElementById('voted').value;
-      var txid;
-      //var teststr = 'abc';
-      //hash_image = teststr;
-      decentar.registerItem(0, "name_spark", "time100", "loc159", hash_image, function(e,r){
-           //document.getElementById('uploadresult').innerHTML = "¾�㠿Ϸ�
+
+      var cat_id = 0;
+
+      decentar.registerItem(cat_id, "name_spark", "time100", "loc159", hash_image, function(e,r){
+           //document.getElementById('uploadresult').innerHTML = "Upload 완료";
       });
     }
     function showItem() {
       decentar.getTotalListLength(function(e,r){
            N_items = r;
           document.getElementById('totalitems').innerHTML = N_items;
-          /*arr_b_time = new Array(N_items);
+          arr_b_time = new Array(N_items);
           arr_location = new Array(N_items);
-          arr_hash_img = new Array(N_items);*/
+          arr_hash_img = new Array(N_items);
       });
-      //for(var i=0;i<N_items;i++){
-        decentar.getItem(id_item, function(e,r){
-          arr_b_time[id_item] = r[0];
-          arr_location[id_item] = r[1];
-          arr_hash_img[id_item] = r[2];
-          document.getElementById('itemid').innerHTML = id_item;
-          document.getElementById('blocktime').innerHTML = arr_b_time[id_item];
-          document.getElementById('location').innerHTML = arr_location[id_item];
-          document.getElementById('ipfshash').innerHTML = arr_hash_img[id_item];
-          document.getElementById('showphoto').src = arr_hash_img[id_item];
-        });
-    //  }
+      
+      decentar.getItem(id_item, function(e,r){
+        arr_b_time[id_item] = r[0];
+        arr_location[id_item] = r[1];
+        //arr_hash_img[id_item] = r[2];
+        document.getElementById('itemid').innerHTML = id_item;
+        document.getElementById('blocktime').innerHTML = arr_b_time[id_item];
+        document.getElementById('location').innerHTML = arr_location[id_item];
+        document.getElementById('ipfshash').innerHTML = arr_hash_img[id_item];
+        document.getElementById('showphoto').src = arr_hash_img[id_item];
+      });
+
       document.getElementById("output").src = " ";
       id_item++;
       if(id_item==N_items) id_item = 0;
@@ -161,184 +166,43 @@
       oCurrentCell.innerHTML = strHTML;
       form.rowCount.value = rowIndex;
     }
-
-     //for(var i=0;i<N_items;i++)
-     {
-/*       decentar.getItem(i, function(e,r){
-         arr_b_time[i] = r[0];
-         arr_location[i] = r[1];
-         arr_hash_img[i] = r[2];
-       });*/
-
-       /*decentar.methods.getItem.call(i, function(e,r)
-       {
-         arr_b_time[i] = r[0];
-         arr_location[i] = r[1];
-         arr_hash_img[i] = r[2];
-       });*/
-
-/*       return new Promise((resolve, reject) => {
-				  decentar.getItem.call(function (error, result) {
-				    if (error) {
-				      console.log(error);
-				    } else {
-				      resolve(result);
-				    }
-				  });
-				}) as Promise<number>;*/
-
-			// getData()의 실행이 끝나면 호출되는 then()
-/*			getData(i).then(function (tableData) {
-			  // resolve()의 결과 값이 여기로 전달됨
-			  console.log(tableData); // $.get()의 reponse 값이 tableData에 전달됨
-			});*/
-// 			var a,b,c;
-// 			getData().then(function (data) {
-// 			  console.log(data[1]); // response 값 출력
-// /*			  arr_b_time[i] = data[0];
-//         arr_location[i] = data[1];
-//         arr_hash_img[i] = data[2];*/
-//
-//        /*document.getElementById('blocktime'+i.toString()).innerHTML = data[0];
-//        document.getElementById('location'+i.toString()).innerHTML = data[1];
-//        document.getElementById('ipfshash'+i.toString()).innerHTML = data[2];
-//        document.getElementById('showphoto'+i.toString()).src = data[2];*/
-//
-//        //document.getElementById('totalitem').innerHTML = "hahaha";
-//        console.log(data[2]); // response 값 출력
-//
-// /*        a = data[0];
-//         b = data[1];
-//         c = data[2];*/
-//
-// 			}).catch(function (err) {
-// 			  console.error(err); // Error 출력
-// 			});
-
-			/*arr_b_time[i] = a;
-      arr_location[i] = b;
-      arr_hash_img[i] = c;
-      console.log(c);*/
-
-
-       //ref 'Premise'
-       /*return new Promise((resolve, reject) => {
-				  contractInstance.**yourMethod**.call(function (error, result) {
-				    if (error) {
-				      console.log(error);
-				    } else {
-				      resolve(result);
-				    }
-				  });
-				}) as Promise<number>;*/
-     }
-/*var i=1;*/
-    //for(var i=0;i<5;i++){
-        // decentar.getItem(i).then(function(ret){
-        //     arr_b_time[i] = ret[0];
-        // });
-    //}
-
-   /* i=3;
-    decentar.getItem(i, function(e,r){
-      arr_b_time[i] = r[0];
-      arr_location[i] = r[1];
-      arr_hash_img[i] = r[2];
-    });*/
+ 
   }
-
-function assignid(){
-
+function storedata(form){
   for(var i=0;i<N_items;i++)
   {
-     getData().then(function (data) {
+  	 //var data;
+     getData(i).then(function (data) {
       console.log(i);
-      // console.log(data[1]); // response 값 출력
-    /*			  arr_b_time[i] = data[0];
-      arr_location[i] = data[1];
-      arr_hash_img[i] = data[2];*/
-
-     document.getElementById('blocktime'+i.toString()).innerHTML = data[0];
-     document.getElementById('location'+i.toString()).innerHTML = data[1];
-     document.getElementById('ipfshash'+i.toString()).innerHTML = data[2];
-     document.getElementById('showphoto'+i.toString()).src = data[2];
-
-     // document.getElementById('blocktime'+i.toString()).innerHTML = "A";
-     // document.getElementById('location'+i.toString()).innerHTML = "B";
-     // document.getElementById('ipfshash'+i.toString()).innerHTML = "C";
-     // document.getElementById('showphoto'+i.toString()).src = "D";
-
-     //document.getElementById('totalitem').innerHTML = "hahaha";
-     // console.log(data[2]); // response 값 출력
-
-    /*        a = data[0];
-      b = data[1];
-      c = data[2];*/
+      console.log(data);
 
     }).catch(function (err) {
       console.error(err); // Error 출력
     });
+    //.then(write_html(form));
+
+     //write_html(form)
   }
 }
 
-
-/*  async function get_item(var i)
+  function getData(i)
   {
-
-  }*/
-
-  function getData()
-  {
-  	/*var i=2;
-	  // new Promise() 추가
-	  return new Promise(function (resolve, reject) {
-	    decentar.getItem(i, function (response) {
-	      // 데이터를 받으면 resolve() 호출
-	      if(response)
-	      	resolve(response);
-	      else
-	      	reject(new Error("Failed"));
-
-	    });
-	  });*/
-	  var i=5;
 	  return new Promise((resolve, reject) => {
 		  decentar.getItem.call(i, function (error, result) {
 		    if (error) {
 		      console.log(error);
 		    } else {
+		    	arr_b_time[i] = result[0];
+      		arr_location[i] = result[1];
+     			arr_hash_img[i] = result[2];
+		    	
 		      resolve(result);
 		    }
 	  });
 })
 	}
-
   function write_html(form)
   {
-    // document.getElementById('itemid').innerHTML = "ha";
-  /*   document.getElementById('itemid1').innerHTML = "ha1";
-     document.getElementById('itemid2').innerHTML = "haha";
-     document.getElementById('itemid3').innerHTML = "hahaha";
-    document.getElementById('blocktime1').innerHTML = "btime1";*/
-    //document.getElementById('itemid').innerHTML = "ha";
-    // decentar.getTotalListLength(function(e,r){
-    //      N_items = r;
-    //     document.getElementById('totalitems').innerHTML = N_items;
-    // });
-    // for(var i=0;i<N_items;i++){
-    //   decentar.getItem(i, function(e,r){
-    //     arr_b_time[i] = r[0];
-    //     arr_location[i] = r[1];
-    //     arr_hash_img[i] = r[2];
-    //     //document.getElementById('itemid'+i).innerHTML = i;
-    //     //document.getElementById('blocktime'+i.toString()).innerHTML = arr_b_time[i];
-    //     // document.getElementById('location'+i.toString()).innerHTML = arr_location[i];
-    //     // document.getElementById('ipfshash'+i.toString()).innerHTML = arr_hash_img[i];
-    //     // document.getElementById('showphoto'+i.toString()).src = arr_hash_img[i];
-    //   });
-    // }
-
-     //console.log(arr_hash_img[8]);
      for(var i=0;i<N_items;i++){
        document.getElementById('itemid'+i.toString()).innerHTML = i;
        document.getElementById('blocktime'+i.toString()).innerHTML = arr_b_time[i];
@@ -346,11 +210,11 @@ function assignid(){
        document.getElementById('ipfshash'+i.toString()).innerHTML = arr_hash_img[i];
        document.getElementById('showphoto'+i.toString()).src = arr_hash_img[i];
      }
-    //document.getElementById('itemid1').innerHTML = arr_b_time[1];
-    // var hoverInv = document.getElementsByClassName("hoverinv");
-    // for (var i=0; i<hoverInv.length; i++){
-    //      hoverInv[i].style.display = "";
-    // }
+    
+     /*var hoverInv = document.getElementsByClassName("hoverinv");
+     for (var i=0; i<hoverInv.length; i++){
+          hoverInv[i].style.display = "";
+     }*/
   }
   </script>
   <body>
@@ -360,7 +224,7 @@ function assignid(){
         <input type="file" name="photo" id="photo">
         <button size='15' type="button" onclick="upload()">Upload</button>
         <button type="button" onclick="storeHash()">Store Hash to Blockchain</button>
-        <button type="button" onclick="showItem()">Show Item One-by-one</button>
+        <!--<button type="button" onclick="showItem()">Show Item One-by-one</button>-->
 
       </fieldset>
     </form>
@@ -394,17 +258,9 @@ function assignid(){
 	  </tr>
 	</table>
 
-  <!-- <form name="write">
-      <table name='insertTable' id='insertTable' border=1 cellpadding=10 cellspacing=10>
-      </table>
-      <input type="button" value="Show Full List" onClick="dynamictable(write,1)" border=0 style='cursor:hand'>
-      <input type="button" value="º¸L±ࠠonClick='write_html(write)' border=0 style='cursor:hand'>
-      <input type="hidden" name="rowCount" value="1">
-  </form> -->
-
   <form name="write">
   		<input type="button" value="Make Table" onClick="dynamictable(write)" border=0 style='cursor:hand'>
-      <input type="button" value="Assign ID" onClick="assignid(write)" border=0 style='cursor:hand'>
+      <input type="button" value="Store Data" onClick="storedata(write)" border=0 style='cursor:hand'>
       <input type="button" value="Show" onClick='write_html(write)' border=0 style='cursor:hand'>
       <input type="hidden" name="rowCount" value="1">
       <table name='insertTable' id='insertTable' border=1 cellpadding=1 cellspacing=1 style="width:50%">
