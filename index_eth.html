@@ -67,6 +67,7 @@
       // Now you can start your app & access web3 freely:
       startApp();
     });
+    
     function startApp() {
       var contractAddress = '0xd1780a5cce46ed07119d1cdf8da8c04800f11c09';
       var abi = [{"constant":true,"inputs":[],"name":"getOwnder","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getItem","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getTotalListLength","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getN_items_ofMine","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getItem_ofMine","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_id_tab","type":"uint256"},{"name":"_name","type":"string"},{"name":"_time","type":"string"},{"name":"_location","type":"string"},{"name":"_hash_image","type":"string"}],"name":"registerItem","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}];
@@ -88,9 +89,11 @@
       
       //dynamictable(write);
     }
+    
     function storeHash() {
       setItem(hash_img);
     }
+    
     function setItem(hash_image) {
 
       var cat_id = 0;
@@ -99,6 +102,7 @@
            //document.getElementById('uploadresult').innerHTML = "Upload 완료";
       });
     }
+    
     function showItem() {
       decentar.getTotalListLength(function(e,r){
            N_items = r;
@@ -111,7 +115,7 @@
       decentar.getItem(id_item, function(e,r){
         arr_b_time[id_item] = r[0];
         arr_location[id_item] = r[1];
-        //arr_hash_img[id_item] = r[2];
+        arr_hash_img[id_item] = r[2];
         document.getElementById('itemid').innerHTML = id_item;
         document.getElementById('blocktime').innerHTML = arr_b_time[id_item];
         document.getElementById('location').innerHTML = arr_location[id_item];
@@ -133,37 +137,38 @@
         arr_location = new Array(N_items);
         arr_hash_img = new Array(N_items);*/
     });
-    var r;
+    
     var strHTML;
     strHTML = "	  <tr>";
 	  strHTML +=  "<th>Item ID</th>";
-	  strHTML +=  "<th>Time (block.timestamp)</th>";
-	  strHTML +=  "<th>Location (TBD: QR code ID?)</th>";
+	  strHTML +=  "<th>Timestamp</th>";
+	  strHTML +=  "<th>QR code</th>";
 	  strHTML +=  "<th>IPFS hash</th>";
 	  strHTML +=  "<th>Image</th>";
 	  strHTML +=  "</tr>";
 	  oCurrentRow = insertTable.insertRow();
     rowIndex = oCurrentRow.rowIndex;
-    oCurrentCell = oCurrentRow.insertCell();
-    oCurrentCell.innerHTML = strHTML;
+    oCurrentRow.innerHTML = strHTML;
+    
     rowIndex++;
     form.rowCount.value = rowIndex;
-	  //N_items = 1;
+	
     for(var i=0;i<N_items;i++)
     {
       oCurrentRow = insertTable.insertRow();
       rowIndex = oCurrentRow.rowIndex;
-      oCurrentCell = oCurrentRow.insertCell();
+      //oCurrentCell = oCurrentRow.insertCell();
       rowIndex++;
       strHTML =  "<tr>";
       //strHTML += "<td width='50' border=1>"+ rowIndex +"</td>";
       strHTML += "<td width='50'>"+ "<a id='itemid"+i.toString()+"'></a>" +"</td>";
       strHTML += "<td width='50'>"+ "<a id='blocktime"+i.toString()+"'></a>" +"</td>";
      	strHTML += "<td width='50'>"+ "<a id='location"+i.toString()+"'></a>" +"</td>";
-     	strHTML += "<td width='50'>"+ "<a id='ipfshash"+i.toString()+"'></a>" +"</td>";
+     	strHTML += "<td width='10'>"+ "<a id='ipfshash"+i.toString()+"'></a>" +"</td>";
      	strHTML += "<td width='50'>"+ "<img id='showphoto"+i.toString()+"' height='100'></a>" +"</td>";
       strHTML += "</tr>";
-      oCurrentCell.innerHTML = strHTML;
+      oCurrentRow.innerHTML = strHTML;
+
       form.rowCount.value = rowIndex;
     }
  
@@ -171,7 +176,6 @@
 function storedata(form){
   for(var i=0;i<N_items;i++)
   {
-  	 //var data;
      getData(i).then(function (data) {
       console.log(i);
       console.log(data);
@@ -179,13 +183,22 @@ function storedata(form){
     }).catch(function (err) {
       console.error(err); // Error 출력
     });
-    //.then(write_html(form));
+
+    
+/*    getData(i).then(function (data) {
+      console.log(i);
+      console.log(data);
+
+    }).then( write_html(form))
+    .catch(function (err) {
+      console.error(err); // Error 출력
+    });*/
 
      //write_html(form)
   }
 }
 
-  function getData(i)
+  function getData(i)	
   {
 	  return new Promise((resolve, reject) => {
 		  decentar.getItem.call(i, function (error, result) {
@@ -228,12 +241,12 @@ function storedata(form){
 
       </fieldset>
     </form>
-    </br>
+<!--    </br>
     </br>
     <a id="url"></a>
     </br>
     </br>
-    <img id="output" height="200">
+    <img id="output" height="200">-->
     <p>image info</p>
     <a id="totalitems">: Numbers of total item</a>
     <!--<a id="itemid"></a>
@@ -241,7 +254,7 @@ function storedata(form){
     <a id="ipfshash"></a>
     <img id="showphoto" height="200">-->
 
-  <table style="width:50%">
+<!--  <table style="width:50%">
 	  <tr>
 	    <th>Item ID</th>
 	    <th>Time (block.timestamp)</th>
@@ -256,7 +269,7 @@ function storedata(form){
 	    <td><a id="ipfshash"</a></td>
 	    <td><img id="showphoto" height="100"></td>
 	  </tr>
-	</table>
+	</table>-->
 
   <form name="write">
   		<input type="button" value="Make Table" onClick="dynamictable(write)" border=0 style='cursor:hand'>
