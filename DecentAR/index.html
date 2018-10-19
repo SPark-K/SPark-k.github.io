@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JavaScript file upload</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <!--<script src="https://wzrd.in/standalone/buffer"></script>-->
+    <script src="https://unpkg.com/ipfs-api@9.0.0/dist/index.js"
+    integrity="sha384-5bXRcW9kyxxnSMbOoHzraqa7Z0PQWIao+cgeg327zit1hz5LZCEbIMx/LWKPReuB"
+    crossorigin="anonymous"></script>
+    <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
+    <!--<script src="./web3.js"></script>-->
+  </head>
+  <style>
+	  table, th, td { border: 1px solid black; }
+  </style>
+  <script type="text/javascript">
+    var hash_img;
+/*     var arr_b_time = new Array(20);
+     var arr_location = new Array(20);
+     var arr_hash_img = new Array(20);*/
+	   var arr_cat_id;
+	   var arr_b_time;
+	   var arr_location;
+	   var arr_qr_code;
+	   var arr_hash_img;
+     var selected_cat_id = 0;
+    var N_items;
+    function upload() {
+      const reader = new FileReader();
+      reader.onloadend = function() {
+        //const ipfs = window.IpfsApi('localhost', 5001) // Connect to IPFS
+        const ipfs = window.IpfsApi('ipfs.infura.io', '5001', {protocol: 'https'});
+        const Buffer = ipfs.Buffer;
+        const buf = Buffer(reader.result);  //Convert data into buffer
+        //const buf = buffer.Buffer(reader.result); // Convert data into buffer
+        ipfs.files.add(buf, (err, result) => { // Upload buffer to IPFS
+          if(err) {
+            console.error(err)
+            return
+          }
+          let url = `https://ipfs.io/ipfs/${result[0].hash}`
+          hash_img = url;
+          console.log(`Url --> ${url}`)
+          document.getElementById("url").innerHTML= url
+          document.getElementById("url").href= url
+          document.getElementById("output").src = url
+        })
+      }
+      //setItem(hash_img);
+      const photo = document.getElementById("photo");
+      reader.readAsArrayBuffer(photo.files[0]); // Read Provided File
+      //setItem(selected_cat_id, hash_img);
+    }
+    var decentarContract;
+    var decentar;
+    window.addEventListener('load', function() {
+      // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+      if (typeof web3 !== 'undefined') {
+        // Use Mist/MetaMask's provider
+        window.web3 = new Web3(web3.currentProvider);
+      } else {
+        console.log('No web3? You should consider trying MetaMask!')
+        // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+        //window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        //window.web3 = new Web3(new Web3.providers.WebsocketProvider("wss://mainnet.infura.io/ws"));
+        window.web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/207f7e69ea9c48be88d2c17a90c51a07"));
+      }
+      // Now you can start your app & access web3 freely:
+      startApp();
+    });
+    function startApp() {
+      var contractAddress = '0x2dce7d73f833072934029bec5af90d94e35646c5';
+      var abi = [{"constant":true,"inputs":[],"name":"getOwnder","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getsubItemLength","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getItem","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"id_item","type":"uint256"},{"name":"sub_id","type":"uint256"}],"name":"getsubItem","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_cat_id","type":"uint256"},{"name":"_location","type":"string"},{"name":"_qrcode","type":"string"},{"name":"_hash_image","type":"string"}],"name":"registerItem","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getTotalListLength","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getN_items_ofMine","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getItem_ofMine","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id_item","type":"uint256"},{"name":"_location","type":"string"},{"name":"_hash_image","type":"string"}],"name":"addItem","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}];
+      decentarContract = web3.eth.contract(abi);
+      decentar = decentarContract.at(contractAddress);
+      //document.getElementById('contractAddr').innerHTML = getLink(contractAddress);
+      web3.eth.getAccounts(function(e,r){
+      //document.getElementById('accountAddr').innerHTML = getLink(r[0]);
+      });
+      id_item = 0;
+      decentar.getTotalListLength(function(e,r){
+           N_items = r;
+          document.getElementById('totalitems').innerHTML = N_items;
+          asyncshowData(write);
+      });
+      arr_b_time = new Array(N_items);
+      arr_location = new Array(N_items);
+      arr_qr_code = new Array(N_items);
+      arr_hash_img = new Array(N_items);
+    }
+    function storeHash() {
+      setItem(selected_cat_id, hash_img);
+    }
+    function setItem(cat_id, hash_image) {
+    	//get GPS
+    	my_location = "GPS@%BDFG#$@#$534095830";
+    	//get QR code
+    	my_qr_code = "567";
+    	
+      decentar.registerItem(cat_id, my_location, my_qr_code, hash_image, function(e,r){
+           document.getElementById('uploadresult').innerHTML = "Upload 완료";
+      });
+      
+      decentar.getTotalListLength(function(e,r){
+           N_items = r;
+          document.getElementById('totalitems').innerHTML = N_items;
+          asyncshowData(write);
+      });
+    }
+  function dynamictable(form){
+    var oCurrentRow,oCurrentCell;
+    var sAddingHtml;
+    var strHTML;
+    strHTML = "	  <tr>";
+	  strHTML +=  "<th>Item ID</th>";
+	  strHTML +=  "<th>Timestamp</th>";
+	  strHTML +=  "<th>QR code</th>";
+	  strHTML +=  "<th>IPFS hash</th>";
+	  strHTML +=  "<th>Image</th>";
+    strHTML +=  "<th>Add photo</th>";
+	  strHTML +=  "</tr>";
+	  oCurrentRow = insertTable.insertRow();
+    rowIndex = oCurrentRow.rowIndex;
+    oCurrentRow.innerHTML = strHTML;
+    rowIndex++;
+    form.rowCount.value = rowIndex;
+    for(var i=0;i<N_items;i++)
+    {
+      oCurrentRow = insertTable.insertRow();
+      rowIndex = oCurrentRow.rowIndex;
+      //oCurrentCell = oCurrentRow.insertCell();
+      rowIndex++;
+      strHTML =  "<tr>";
+      //strHTML += "<td width='50' border=1>"+ rowIndex +"</td>";
+      strHTML += "<td width='50'>"+ "<a id='itemid"+i.toString()+"'></a>" +"</td>";
+      strHTML += "<td width='50'>"+ "<a id='blocktime"+i.toString()+"'></a>" +"</td>";
+     	strHTML += "<td width='50'>"+ "<a id='qr_code"+i.toString()+"'></a>" +"</td>";
+     	strHTML += "<td width='10'>"+ "<a id='ipfshash"+i.toString()+"'></a>" +"</td>";
+     	strHTML += "<td width='50'>"+ "<img id='showphoto"+i.toString()+"' height='100'></a>" +"</td>";
+      strHTML += "<td width='50'>"+ "<button size='20' type='button' id='addphoto"+i.toString()+"' onclick='add_photo("+ i.toString() +")'>+</button>" +"</td>";
+      strHTML += "<td width='50'>"+ "<a id='qr_code"+i.toString()+"'></a>" +"</td>";
+      strHTML += "</tr>";
+      oCurrentRow.innerHTML = strHTML;
+      form.rowCount.value = rowIndex;
+    }
+    write_html();
+  }
+function storedata(){
+  for(var i=0;i<N_items;i++)
+  {
+     getData(i).then(function (data) {
+      //console.log(i);
+      console.log(data);
+    }).catch(function (err) {
+      console.error(err); // Error 출력
+    });
+  }
+}
+function asyncshowData(form)
+{
+	return new Promise((resolve, reject) => {
+		  storedata( function (error, result) {
+		    if (error) {
+		      console.log(error);
+		    } else {
+		      resolve(result);
+		    }
+	  });
+	})
+}
+  function getData(i)
+  {
+	  return new Promise((resolve, reject) => {
+		  decentar.getItem.call(i, function (error, result) {
+		    if (error) {
+		      console.log(error);
+		    } else {
+		    	arr_b_time[i] = result[0];
+      		arr_location[i] = result[1];
+     			arr_qr_code[i] = result[2];
+     			arr_hash_img[i] = result[3];
+		      resolve(result);
+		    }
+	  });
+   })
+	}
+  function write_html()
+  {
+     for(var i=0;i<N_items;i++){
+       document.getElementById('itemid'+i.toString()).innerHTML = i;
+       document.getElementById('blocktime'+i.toString()).innerHTML = arr_b_time[i];       
+       document.getElementById('qr_code'+i.toString()).innerHTML = arr_qr_code[i];
+       document.getElementById('ipfshash'+i.toString()).innerHTML = arr_hash_img[i];
+       document.getElementById('showphoto'+i.toString()).src = arr_hash_img[i];
+       
+       document.getElementById('location'+i.toString()).innerHTML = arr_location[i];
+       document.getElementById('location'+i.toString()).style.visibility = "hidden";       
+     }
+  }
+  function select_cat(i)
+  {
+    selected_cat_id = i;
+    if(i==0){
+      document.getElementById('cat2').style.visibility = "hidden";
+    }
+    else{
+      document.getElementById('cat1').style.visibility = "hidden";
+    }
+  }
+  </script>
+  <body>
+    <form action="/">
+      <fieldset>
+        <legend>Upload photo</legend>
+        <button id='cat1' size='5' type="button" onclick="select_cat(0)">Cat1</button>
+        <button id='cat2' size='5' type="button" onclick="select_cat(1)">Cat2</button>
+        <input type="file" name="photo" id="photo">
+        <button size='15' type="button" onclick="upload()">Upload</button>
+        <button type="button" onclick="storeHash()">Store Hash to Blockchain</button>
+        <!--<button type="button" onclick="showItem()">Show Item One-by-one</button>-->
+
+      </fieldset>
+    </form>
+
+		<p>Uploaded image info</p>
+		<a id="uploadresult"></a>
+    <a id="url"></a>
+    <img id="output" height="100">
+
+    <p>Image List</p>
+    <a id="totalitems">: Numbers of total item</a>
+
+  <form name="write">
+  	  <!-- <input type="button" value="Download Data" onClick="asyncshowData(write)" border=0 style='cursor:hand'> -->
+  		<input type="button" value="Show List" onClick="dynamictable(write)" border=0 style='cursor:hand'>
+      <!--<input type="button" value="Show" onClick='write_html()' border=0 style='cursor:hand'>-->
+      <input type="hidden" name="rowCount" value="1">
+      <table name='insertTable' id='insertTable' border=1 cellpadding=1 cellspacing=1 style="width:50%">
+
+      </table>
+
+  </form>
+
+  </body>
+</html>
