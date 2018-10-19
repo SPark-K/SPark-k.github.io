@@ -112,6 +112,13 @@
       decentar.registerItem(cat_id, "name_spark", "time100", "loc159", hash_image, function(e,r){
            document.getElementById('uploadresult').innerHTML = "Upload 완료";
       });
+	    
+	    
+      decentar.getTotalListLength(function(e,r){
+          N_items = r;
+          document.getElementById('totalitems').innerHTML = N_items;
+          asyncshowData(write);
+      });
     }
 
   function dynamictable(form){
