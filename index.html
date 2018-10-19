@@ -25,6 +25,8 @@
 	   var arr_hash_img;
      var selected_cat_id = 0;
     var N_items;
+    
+    
     function upload() {
       const reader = new FileReader();
       reader.onloadend = function() {
@@ -46,11 +48,13 @@
           document.getElementById("output").src = url
         })
       }
-      //setItem(hash_img);
+
       const photo = document.getElementById("photo");
       reader.readAsArrayBuffer(photo.files[0]); // Read Provided File
       //setItem(selected_cat_id, hash_img);
     }
+    
+    
     var decentarContract;
     var decentar;
     window.addEventListener('load', function() {
@@ -74,9 +78,9 @@
       decentarContract = web3.eth.contract(abi);
       decentar = decentarContract.at(contractAddress);
       //document.getElementById('contractAddr').innerHTML = getLink(contractAddress);
-      web3.eth.getAccounts(function(e,r){
+      //web3.eth.getAccounts(function(e,r){
       //document.getElementById('accountAddr').innerHTML = getLink(r[0]);
-      });
+      //});
       id_item = 0;
       decentar.getTotalListLength(function(e,r){
            N_items = r;
@@ -89,35 +93,48 @@
       arr_hash_img = new Array(N_items);
     }
     function storeHash() {
-      setItem(selected_cat_id, hash_img);
+      setItem(selected_cat_id);
     }
-    function setItem(cat_id, hash_image) {
+    function setItem(cat_id) {
     	//get GPS
     	my_location = "GPS@%BDFG#$@#$534095830";
     	//get QR code
     	my_qr_code = "567";
-    	
-      decentar.registerItem(cat_id, my_location, my_qr_code, hash_image, function(e,r){
+
+      decentar.registerItem(cat_id, my_location, my_qr_code, hash_img, function(e,r){
            document.getElementById('uploadresult').innerHTML = "Upload 완료";
       });
-      
+
       decentar.getTotalListLength(function(e,r){
            N_items = r;
           document.getElementById('totalitems').innerHTML = N_items;
           asyncshowData(write);
       });
     }
+    
+      function addItem(i) {
+    
+			 //get GPS
+    	my_location = "GPS@2343242332340";
+
+      decentar.addItem(i, my_location, hash_img, function(e,r){
+           document.getElementById('uploadresult').innerHTML = "추가 Upload 완료";
+      });
+    }
+    
   function dynamictable(form){
     var oCurrentRow,oCurrentCell;
     var sAddingHtml;
     var strHTML;
     strHTML = "	  <tr>";
 	  strHTML +=  "<th>Item ID</th>";
-	  strHTML +=  "<th>Timestamp</th>";
+	  //strHTML +=  "<th>Timestamp</th>";
 	  strHTML +=  "<th>QR code</th>";
-	  strHTML +=  "<th>IPFS hash</th>";
+	  //strHTML +=  "<th>IPFS hash</th>";
 	  strHTML +=  "<th>Image</th>";
     strHTML +=  "<th>Add photo</th>";
+    strHTML +=  "<th>Show GPS</th>";
+    strHTML +=  "<th>GPS value</th>";
 	  strHTML +=  "</tr>";
 	  oCurrentRow = insertTable.insertRow();
     rowIndex = oCurrentRow.rowIndex;
@@ -133,12 +150,17 @@
       strHTML =  "<tr>";
       //strHTML += "<td width='50' border=1>"+ rowIndex +"</td>";
       strHTML += "<td width='50'>"+ "<a id='itemid"+i.toString()+"'></a>" +"</td>";
-      strHTML += "<td width='50'>"+ "<a id='blocktime"+i.toString()+"'></a>" +"</td>";
+      //strHTML += "<td width='50'>"+ "<a id='blocktime"+i.toString()+"'></a>" +"</td>";
      	strHTML += "<td width='50'>"+ "<a id='qr_code"+i.toString()+"'></a>" +"</td>";
-     	strHTML += "<td width='10'>"+ "<a id='ipfshash"+i.toString()+"'></a>" +"</td>";
+     	//strHTML += "<td width='10'>"+ "<a id='ipfshash"+i.toString()+"'></a>" +"</td>";
      	strHTML += "<td width='50'>"+ "<img id='showphoto"+i.toString()+"' height='100'></a>" +"</td>";
-      strHTML += "<td width='50'>"+ "<button size='20' type='button' id='addphoto"+i.toString()+"' onclick='add_photo("+ i.toString() +")'>+</button>" +"</td>";
-      strHTML += "<td width='50'>"+ "<a id='qr_code"+i.toString()+"'></a>" +"</td>";
+      //strHTML += "<td width='50'>"+ "<button size='20' type='button' id='addphoto"+i.toString()+"' onclick='add_photo("+ i.toString() +")'>+</button>" +"</td>";
+      strHTML += "<td width='50'>"+ "<input type='file' name='sub' id='subphoto"+i.toString()+"'>" 
+              + "<button size='15' type='button' onclick='add_photo("+ i.toString() +")'>Upload</button>" 
+              + "<button type='button' onclick='addItem("+ i.toString() +")'>저장</button>"               
+              +"</td>";
+      strHTML += "<td width='50'>"+ "<button size='20' type='button' id='showGPS"+i.toString()+"' onclick='show_GPS("+ i.toString() +")'>GPS</button>" +"</td>";
+      strHTML += "<td width='50'>"+ "<a id='location"+i.toString()+"'></a>" +"</td>";
       strHTML += "</tr>";
       oCurrentRow.innerHTML = strHTML;
       form.rowCount.value = rowIndex;
@@ -188,15 +210,55 @@ function asyncshowData(form)
   {
      for(var i=0;i<N_items;i++){
        document.getElementById('itemid'+i.toString()).innerHTML = i;
-       document.getElementById('blocktime'+i.toString()).innerHTML = arr_b_time[i];       
+       //document.getElementById('blocktime'+i.toString()).innerHTML = arr_b_time[i];
        document.getElementById('qr_code'+i.toString()).innerHTML = arr_qr_code[i];
-       document.getElementById('ipfshash'+i.toString()).innerHTML = arr_hash_img[i];
+       //document.getElementById('ipfshash'+i.toString()).innerHTML = arr_hash_img[i];
        document.getElementById('showphoto'+i.toString()).src = arr_hash_img[i];
-       
+
        document.getElementById('location'+i.toString()).innerHTML = arr_location[i];
-       document.getElementById('location'+i.toString()).style.visibility = "hidden";       
+       document.getElementById('location'+i.toString()).style.visibility = "hidden";
+
+       //document.getElementById('addfile'+i.toString()).style.visibility = "hidden";
      }
   }
+
+  function add_photo(i)
+  {
+  	const reader = new FileReader();
+      reader.onloadend = function() {
+        //const ipfs = window.IpfsApi('localhost', 5001) // Connect to IPFS
+        const ipfs = window.IpfsApi('ipfs.infura.io', '5001', {protocol: 'https'});
+        const Buffer = ipfs.Buffer;
+        const buf = Buffer(reader.result);  //Convert data into buffer
+        //const buf = buffer.Buffer(reader.result); // Convert data into buffer
+        ipfs.files.add(buf, (err, result) => { // Upload buffer to IPFS
+          if(err) {
+            console.error(err)
+            return
+          }
+          let url = `https://ipfs.io/ipfs/${result[0].hash}`
+          hash_img = url;
+          console.log(`Url --> ${url}`)
+          document.getElementById("url").innerHTML= url
+          document.getElementById("url").href= url
+          document.getElementById("output").src = url
+        })
+      }
+      
+      const photo = document.getElementById("subphoto"+i.toString());
+      reader.readAsArrayBuffer(photo.files[0]); // Read Provided File
+  
+
+  }
+
+  function show_GPS(i)
+  {
+  	//window.web3.eth.sendTransaction({from:eth.coinbase,to:contractAddress, value:window.web3.toWei(0.001, "ether")});
+
+
+  	document.getElementById('location'+i.toString()).style.visibility = "visible";
+  }
+
   function select_cat(i)
   {
     selected_cat_id = i;
