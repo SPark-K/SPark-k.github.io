@@ -97,7 +97,7 @@
       //arr_n_subphotos[0]="555";
       
       //storeNsubitems();
-      //asyncNsubitems();
+      asyncNsubitems();
       
      /* for(var i=0; i<N_items; i++){
 	      decentar.getsubItemLength(i, function(e,r){
@@ -141,7 +141,7 @@
     var oCurrentRow,oCurrentCell;
     var sAddingHtml;
     var strHTML;
-    strHTML = "	  <tr>";
+    strHTML = "	  <tr id='row'>";
 	  strHTML +=  "<th>Item ID</th>";
 	  //strHTML +=  "<th>Timestamp</th>";
 	  strHTML +=  "<th>QR code</th>";
@@ -150,7 +150,8 @@
 	  strHTML +=  "<th>Photo Number</th>";
     strHTML +=  "<th>Add photo</th>";
     strHTML +=  "<th>Show GPS</th>";
-    strHTML +=  "<th>GPS value</th>";
+    strHTML +=  "<th>GPS Value</th>";
+    strHTML +=  "<th>Show More</th>";
 	  strHTML +=  "</tr>";
 	  oCurrentRow = insertTable.insertRow();
     rowIndex = oCurrentRow.rowIndex;
@@ -163,7 +164,7 @@
       rowIndex = oCurrentRow.rowIndex;
       //oCurrentCell = oCurrentRow.insertCell();
       rowIndex++;
-      strHTML =  "<tr>";
+      strHTML =  "<tr id='row"+i.toString()+"'>";
       //strHTML += "<td width='50' border=1>"+ rowIndex +"</td>";
       strHTML += "<td width='50'>"+ "<a id='itemid"+i.toString()+"'></a>" +"</td>";
       //strHTML += "<td width='50'>"+ "<a id='blocktime"+i.toString()+"'></a>" +"</td>";
@@ -178,6 +179,7 @@
               +"</td>";
       strHTML += "<td width='50'>"+ "<button size='20' type='button' id='showGPS"+i.toString()+"' onclick='show_GPS("+ i.toString() +")'>$GPS$</button>" +"</td>";
       strHTML += "<td width='50'>"+ "<a id='location"+i.toString()+"'></a>" +"</td>";
+      strHTML += "<td width='50'>"+ "<button size='20' type='button' id='showMore"+i.toString()+"' onclick='show_more("+ i.toString() +")'>$More$</button>" +"</td>";
       strHTML += "</tr>";
       oCurrentRow.innerHTML = strHTML;
       form.rowCount.value = rowIndex;
@@ -215,10 +217,10 @@ function asyncshowData(form)
 		      console.log(error);
 		    } else {
 		    	arr_b_time[i] = result[0];
-      			arr_location[i] = result[1];
+      		arr_location[i] = result[1];
      			arr_qr_code[i] = result[2];
      			arr_hash_img[i] = result[3];
-			arr_n_subphotos[i] = result[4];
+     			arr_n_subphotos[i] = result[4];
 		      resolve(result);
 		    }
 	  });
@@ -276,6 +278,7 @@ function asyncshowData(form)
   function write_html()
   {
      for(var i=0;i<N_items;i++){
+     	
        document.getElementById('itemid'+i.toString()).innerHTML = i;
        //document.getElementById('blocktime'+i.toString()).innerHTML = arr_b_time[i];
        document.getElementById('qr_code'+i.toString()).innerHTML = arr_qr_code[i];
@@ -285,8 +288,27 @@ function asyncshowData(form)
        document.getElementById('location'+i.toString()).innerHTML = arr_location[i];
        document.getElementById('location'+i.toString()).style.visibility = "hidden";
        //document.getElementById('addfile'+i.toString()).style.visibility = "hidden";
-     }
+       
+      /*if(arr_n_subphotos[i]==0)
+       	document.getElementById('row'+i.toString()).style.visibility = "hidden";*/
+      
+   }
+   
+   hide_subitems();
+ 
   }
+  
+  function hide_subitems()
+  {
+   		for(var i=0;i<N_items;i++)
+        	if(arr_n_subphotos[i]==0)
+        	{
+ 			
+      			insertTable.rows[i+1].style.display = "none";		
+        	}
+	
+  }
+  
   function add_photo(i)
   {
   	const reader = new FileReader();
@@ -329,6 +351,14 @@ function asyncshowData(form)
       document.getElementById('cat1').style.visibility = "hidden";
     }
   }
+  
+  function show_more(i)
+  {
+  	
+  	for(var i=0;i<N_items;i++)
+  		insertTable.rows[i+1].style.display = "";		  	
+  }
+  
   </script>
   <body>
     <form action="/">
