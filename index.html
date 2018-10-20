@@ -22,6 +22,7 @@
 	   var arr_b_time;
 	   var arr_location;
 	   var arr_qr_code;
+	   var arr_n_subphotos;
 	   var arr_hash_img;
      var selected_cat_id = 0;
     var N_items;
@@ -48,7 +49,6 @@
           document.getElementById("output").src = url
         })
       }
-
       const photo = document.getElementById("photo");
       reader.readAsArrayBuffer(photo.files[0]); // Read Provided File
       //setItem(selected_cat_id, hash_img);
@@ -73,8 +73,8 @@
       startApp();
     });
     function startApp() {
-      var contractAddress = '0x2dce7d73f833072934029bec5af90d94e35646c5';
-      var abi = [{"constant":true,"inputs":[],"name":"getOwnder","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getsubItemLength","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getItem","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"id_item","type":"uint256"},{"name":"sub_id","type":"uint256"}],"name":"getsubItem","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_cat_id","type":"uint256"},{"name":"_location","type":"string"},{"name":"_qrcode","type":"string"},{"name":"_hash_image","type":"string"}],"name":"registerItem","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getTotalListLength","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getN_items_ofMine","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getItem_ofMine","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id_item","type":"uint256"},{"name":"_location","type":"string"},{"name":"_hash_image","type":"string"}],"name":"addItem","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}];
+      var contractAddress = '0xd0bcb1c2e653615eb6b7da11c1b7e3c20f66addd';
+      var abi = [{"constant":true,"inputs":[],"name":"getOwnder","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getsubItemLength","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getItem","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"id_item","type":"uint256"},{"name":"sub_id","type":"uint256"}],"name":"getsubItem","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_cat_id","type":"uint256"},{"name":"_location","type":"string"},{"name":"_qrcode","type":"string"},{"name":"_hash_image","type":"string"}],"name":"registerItem","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getTotalListLength","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getN_items_ofMine","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getItem_ofMine","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id_item","type":"uint256"},{"name":"_location","type":"string"},{"name":"_hash_image","type":"string"}],"name":"addItem","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}];
       decentarContract = web3.eth.contract(abi);
       decentar = decentarContract.at(contractAddress);
       //document.getElementById('contractAddr').innerHTML = getLink(contractAddress);
@@ -87,10 +87,28 @@
           document.getElementById('totalitems').innerHTML = N_items;
           asyncshowData(write);
       });
+      
       arr_b_time = new Array(N_items);
       arr_location = new Array(N_items);
       arr_qr_code = new Array(N_items);
+      arr_n_subphotos = new Array(N_items);
       arr_hash_img = new Array(N_items);
+      
+      //arr_n_subphotos[0]="555";
+      
+      //storeNsubitems();
+      asyncNsubitems();
+      
+     /* for(var i=0; i<N_items; i++){
+	      decentar.getsubItemLength(i, function(e,r){
+	      		console.log(r);
+	          arr_n_subphotos[i]="555";
+	          //document.getElementById('totalitems').innerHTML = N_items;
+	          asyncshowData(write);
+	      });
+    	}*/
+    	
+    	
     }
     function storeHash() {
       setItem(selected_cat_id);
@@ -100,11 +118,9 @@
     	my_location = "GPS@%BDFG#$@#$534095830";
     	//get QR code
     	my_qr_code = "567";
-
       decentar.registerItem(cat_id, my_location, my_qr_code, hash_img, function(e,r){
            document.getElementById('uploadresult').innerHTML = "Upload 완료";
       });
-
       decentar.getTotalListLength(function(e,r){
            N_items = r;
           document.getElementById('totalitems').innerHTML = N_items;
@@ -116,7 +132,6 @@
     
 			 //get GPS
     	my_location = "GPS@2343242332340";
-
       decentar.addItem(i, my_location, hash_img, function(e,r){
            document.getElementById('uploadresult').innerHTML = "추가 Upload 완료";
       });
@@ -132,6 +147,7 @@
 	  strHTML +=  "<th>QR code</th>";
 	  //strHTML +=  "<th>IPFS hash</th>";
 	  strHTML +=  "<th>Image</th>";
+	  strHTML +=  "<th>Photo Number</th>";
     strHTML +=  "<th>Add photo</th>";
     strHTML +=  "<th>Show GPS</th>";
     strHTML +=  "<th>GPS value</th>";
@@ -154,6 +170,7 @@
      	strHTML += "<td width='50'>"+ "<a id='qr_code"+i.toString()+"'></a>" +"</td>";
      	//strHTML += "<td width='10'>"+ "<a id='ipfshash"+i.toString()+"'></a>" +"</td>";
      	strHTML += "<td width='50'>"+ "<img id='showphoto"+i.toString()+"' height='100'></a>" +"</td>";
+     	strHTML += "<td width='50'>"+ "<a id='N_subphotos"+i.toString()+"'></a>" +"</td>";
       //strHTML += "<td width='50'>"+ "<button size='20' type='button' id='addphoto"+i.toString()+"' onclick='add_photo("+ i.toString() +")'>+</button>" +"</td>";
       strHTML += "<td width='50'>"+ "<input type='file' name='sub' id='subphoto"+i.toString()+"'>" 
               + "<button size='15' type='button' onclick='add_photo("+ i.toString() +")'>Upload</button>" 
@@ -206,6 +223,55 @@ function asyncshowData(form)
 	  });
    })
 	}
+	
+	function asyncNsubitems()
+{
+	console.log("asynNsub");
+	return new Promise((resolve, reject) => {
+		  storeNsubitems( function (error, result) {
+		    if (error) {
+		      console.log(error);
+		    } else {
+		      resolve(result);
+		    }
+	  });
+	})
+}
+	
+	function storeNsubitems(){
+		console.log("storeNsub");
+		
+  for(var i=0;i<N_items;i++)
+  {
+     getNsubitems(i).then(function (data) {
+      //console.log(i);
+      console.log(data);
+    }).catch(function (err) {
+      console.error(err); // Error 출력
+    });
+  }
+}
+	
+	function getNsubitems(i)
+  {
+  	console.log("getNsub");
+  	
+	  return new Promise((resolve, reject) => {
+		  decentar.getsubItemLength.call(i, function (error, result) {
+		  	
+		    if (error) {
+		      console.log(error);
+		    } else {
+		    	arr_n_subphotos[i] = result[0];
+      		console.log(result[0]);
+		      resolve(result);
+		    }
+	  });
+   })
+	}
+	
+	
+	
   function write_html()
   {
      for(var i=0;i<N_items;i++){
@@ -213,15 +279,13 @@ function asyncshowData(form)
        //document.getElementById('blocktime'+i.toString()).innerHTML = arr_b_time[i];
        document.getElementById('qr_code'+i.toString()).innerHTML = arr_qr_code[i];
        //document.getElementById('ipfshash'+i.toString()).innerHTML = arr_hash_img[i];
+       document.getElementById('N_subphotos'+i.toString()).innerHTML = arr_n_subphotos[i];
        document.getElementById('showphoto'+i.toString()).src = arr_hash_img[i];
-
        document.getElementById('location'+i.toString()).innerHTML = arr_location[i];
        document.getElementById('location'+i.toString()).style.visibility = "hidden";
-
        //document.getElementById('addfile'+i.toString()).style.visibility = "hidden";
      }
   }
-
   function add_photo(i)
   {
   	const reader = new FileReader();
@@ -248,17 +312,12 @@ function asyncshowData(form)
       const photo = document.getElementById("subphoto"+i.toString());
       reader.readAsArrayBuffer(photo.files[0]); // Read Provided File
   
-
   }
-
   function show_GPS(i)
   {
   	//window.web3.eth.sendTransaction({from:eth.coinbase,to:contractAddress, value:window.web3.toWei(0.001, "ether")});
-
-
   	document.getElementById('location'+i.toString()).style.visibility = "visible";
   }
-
   function select_cat(i)
   {
     selected_cat_id = i;
