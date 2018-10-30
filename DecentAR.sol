@@ -16,6 +16,7 @@ contract decentAR {
         uint view_count;
         bool isParent;
         uint[] idx_sub_item;
+        uint N_sub_item;
         //ItemInfo[] sub_item;  //subsidary images
     }
     ItemInfo[] private itemList;
@@ -64,17 +65,18 @@ contract decentAR {
         
         //uint memory tmp_subs;
         //ItemInfo tmp_item = ItemInfo(msg.sender, _time, _location, _hash_image);
-        itemList.push(ItemInfo(msg.sender, _cat_id, block.timestamp, _location, _qrcode, _hash_image, 0, 0, true, new uint[](0)));
+        itemList.push(ItemInfo(msg.sender, _cat_id, block.timestamp, _location, _qrcode, _hash_image, 0, 0, true, new uint[](0), 1));
         //userMap[msg.sender].str_name = _name;
         //userMap[msg.sender].items.push(ItemInfo(msg.sender, _time, _location, _hash_image));
-        userMap[msg.sender].items.push(ItemInfo(msg.sender, _cat_id, block.timestamp, _location, _qrcode, _hash_image, 0, 0, true, new uint[](0)));
+        userMap[msg.sender].items.push(ItemInfo(msg.sender, _cat_id, block.timestamp, _location, _qrcode, _hash_image, 0, 0, true, new uint[](0), 1));
         //getReward(msg.sender);
     }
     
     function addItem(uint id_item, string _location, string _hash_image) public {
  
-        itemList.push(ItemInfo(msg.sender, itemList[id_item].cat_id, block.timestamp, _location, itemList[id_item].str_QRcode, _hash_image, 0, 0, false, new uint[](0)));
+        itemList.push(ItemInfo(msg.sender, itemList[id_item].cat_id, block.timestamp, _location, itemList[id_item].str_QRcode, _hash_image, 0, 0, false, new uint[](0), 0));
         itemList[id_item].idx_sub_item.push(itemList.length - 1);
+        itemList[id_item].N_sub_item++;
         
         if(itemList[id_item].cat_id==0)
         {
@@ -106,13 +108,13 @@ contract decentAR {
         return itemList.length;
     }
     
-    function getItem(uint id_item) public returns(uint, string, string, string) {
+    function getItem(uint id_item) public returns(uint, string, string, string, uint) {
         
-        require(itemList[id_item].isParent == true);
+        //require(itemList[id_item].isParent == true);
         
         itemList[id_item].view_count++;
 
-        return (itemList[id_item].int_time, itemList[id_item].str_location, itemList[id_item].str_QRcode, itemList[id_item].hash_image); 
+        return (itemList[id_item].int_time, itemList[id_item].str_location, itemList[id_item].str_QRcode, itemList[id_item].hash_image, itemList[id_item].N_sub_item); 
     }
     
     function getsubItemLength(uint id_item) public constant returns(uint) {
