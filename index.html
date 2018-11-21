@@ -57,7 +57,36 @@
     
     var decentarContract;
     var decentar;
-    window.addEventListener('load', function() {
+	  
+	window.addEventListener('load', async () => {
+	    // Modern dapp browsers...
+	    if (window.ethereum) {
+		window.web3 = new Web3(ethereum);
+		try {
+		    // Request account access if needed
+		    await ethereum.enable();
+		    // Acccounts now exposed
+		    //web3.eth.sendTransaction({/* ... */});
+			startApp();	
+		} catch (error) {
+		    // User denied account access...
+		}
+	    }
+	    // Legacy dapp browsers...
+	    else if (window.web3) {
+		window.web3 = new Web3(web3.currentProvider);
+		// Acccounts always exposed
+		//web3.eth.sendTransaction({/* ... */});
+		    startApp();
+	    }
+	    // Non-dapp browsers...
+	    else {
+		console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+		window.web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/207f7e69ea9c48be88d2c17a90c51a07"));
+	    }
+	});
+	  
+     /* window.addEventListener('load', function() {
       // Checking if Web3 has been injected by the browser (Mist/MetaMask)
       if (typeof web3 !== 'undefined') {
         // Use Mist/MetaMask's provider
@@ -72,6 +101,7 @@
       // Now you can start your app & access web3 freely:
       startApp();
     });
+    */
     function startApp() {
       var contractAddress = '0x8e63330ac3d0a208f8c621ee6eedffba14543bb9';
       var abi = [{"constant":true,"inputs":[],"name":"getOwnder","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getsubItemLength","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getItem","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"id_item","type":"uint256"},{"name":"sub_id","type":"uint256"}],"name":"getsubItem","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_cat_id","type":"uint256"},{"name":"_location","type":"string"},{"name":"_qrcode","type":"string"},{"name":"_hash_image","type":"string"}],"name":"registerItem","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getTotalListLength","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getN_items_ofMine","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id_item","type":"uint256"}],"name":"getItem_ofMine","outputs":[{"name":"","type":"uint256"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id_item","type":"uint256"},{"name":"_location","type":"string"},{"name":"_hash_image","type":"string"}],"name":"addItem","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"}];
